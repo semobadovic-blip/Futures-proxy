@@ -121,16 +121,16 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
     </div>
   </div>
   <div class="nav">
-    <button class="nav-btn" onclick="changeMonth(-1)">â¹</button>
+    <button class="nav-btn" onclick="changeMonth(-1)">‹</button>
     <div class="nav-month" id="navMonth"></div>
     <button class="nav-today" onclick="goToday()">Heute</button>
-    <button class="nav-btn" onclick="changeMonth(1)">âº</button>
+    <button class="nav-btn" onclick="changeMonth(1)">›</button>
   </div>
 </div>
 
 <div class="status">
   <div class="sdot"></div>
-  <span id="statusText">Signale aktiv Â· 2026</span>
+  <span id="statusText">Signale aktiv · 2026</span>
 </div>
 
 <div class="legend">
@@ -152,7 +152,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 
 <div id="noDataBanner" style="display:none">
   <div class="no-data-month">
-    <div style="font-size:28px;margin-bottom:10px">ð­</div>
+    <div style="font-size:28px;margin-bottom:10px">📭</div>
     <div class="ndm-title">Keine Daten</div>
     <div class="ndm-sub">Tippe "Heute" um zum aktuellen Monat zu springen.</div>
   </div>
@@ -163,7 +163,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 <div class="detail" id="detail">
   <div class="detail-hdr">
     <div class="detail-datum" id="detailDatum"></div>
-    <button class="close-btn" onclick="closeDay()">Ã</button>
+    <button class="close-btn" onclick="closeDay()">×</button>
   </div>
   <div id="evContainer"></div>
 </div>
@@ -171,326 +171,326 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 <script>
 'use strict';
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// ALLE EVENTS 2026 â Zeiten bereits in DE-Zeit (direkt von FF)
+// ══════════════════════════════════════════════
+// ALLE EVENTS 2026 — Zeiten bereits in DE-Zeit (direkt von FF)
 // High = stark marktbewegend | Med = mittel | Low = schwach
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 const EVENTS = [
 
-  // âââââââââââ JANUAR 2026 âââââââââââ
+  // ─────────── JANUAR 2026 ───────────
   // Woche 1
-  {date:"2026-01-07",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"140",prev:"146"},
-  {date:"2026-01-08",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.3",prev:"0.4"},
-  {date:"2026-01-08",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"155",actual:"212",prev:"256"},
-  {date:"2026-01-08",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.2",actual:"4.1",prev:"4.2"},
-  {date:"2026-01-08",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"74.0",prev:"73.2"},
+  {date:"2026-01-07",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"140",prev:"146"},
+  {date:"2026-01-08",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.3",prev:"0.4"},
+  {date:"2026-01-08",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"155",actual:"212",prev:"256"},
+  {date:"2026-01-08",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.2",actual:"4.1",prev:"4.2"},
+  {date:"2026-01-08",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"74.0",prev:"73.2"},
   // Woche 2
-  {date:"2026-01-13",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-01-13",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.9",actual:"2.4",prev:"2.7"},
-  {date:"2026-01-13",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.3"},
-  {date:"2026-01-14",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.4"},
-  {date:"2026-01-14",time:"14:30",flag:"ðºð¸",name:"Core PPI m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.2"},
-  {date:"2026-01-15",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.5",prev:"0.4"},
-  {date:"2026-01-15",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.2"},
-  {date:"2026-01-15",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"215",prev:"201"},
-  {date:"2026-01-16",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"49.8",prev:"49.4"},
-  {date:"2026-01-16",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.8",prev:"56.8"},
+  {date:"2026-01-13",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-01-13",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.9",actual:"2.4",prev:"2.7"},
+  {date:"2026-01-13",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.3"},
+  {date:"2026-01-14",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.4"},
+  {date:"2026-01-14",time:"14:30",flag:"USD",name:"Core PPI m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.2"},
+  {date:"2026-01-15",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.5",prev:"0.4"},
+  {date:"2026-01-15",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.2"},
+  {date:"2026-01-15",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"215",prev:"201"},
+  {date:"2026-01-16",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"49.8",prev:"49.4"},
+  {date:"2026-01-16",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.8",prev:"56.8"},
   // Woche 3
-  {date:"2026-01-21",time:"10:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"0.5",prev:"0.25"},
-  {date:"2026-01-22",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"218",prev:"215"},
+  {date:"2026-01-21",time:"10:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"0.5",prev:"0.25"},
+  {date:"2026-01-22",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"218",prev:"215"},
   // Woche 4
-  {date:"2026-01-27",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"104.5",prev:"104.7"},
-  {date:"2026-01-28",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"-1.1"},
-  {date:"2026-01-28",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"218"},
-  {date:"2026-01-29",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"4.25",prev:"4.25"},
-  {date:"2026-01-30",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.1"},
-  {date:"2026-01-30",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"2.4",prev:"3.1"},
-  {date:"2026-01-30",time:"16:00",flag:"ðºð¸",name:"Revised UoM Consumer Sentiment",impact:"low",currency:"USD",forecast:"73.8",prev:"73.2"},
+  {date:"2026-01-27",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"104.5",prev:"104.7"},
+  {date:"2026-01-28",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"-1.1"},
+  {date:"2026-01-28",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"218"},
+  {date:"2026-01-29",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"4.25",prev:"4.25"},
+  {date:"2026-01-30",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.1"},
+  {date:"2026-01-30",time:"14:30",flag:"USD",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"2.4",prev:"3.1"},
+  {date:"2026-01-30",time:"16:00",flag:"USD",name:"Revised UoM Consumer Sentiment",impact:"low",currency:"USD",forecast:"73.8",prev:"73.2"},
 
-  // âââââââââââ FEBRUAR 2026 âââââââââââ
-  {date:"2026-02-04",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"145",prev:"140"},
-  {date:"2026-02-05",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.2",prev:"54.1"},
-  {date:"2026-02-06",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.4",prev:"0.3"},
-  {date:"2026-02-06",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"160",actual:"-156",prev:"212"},
-  {date:"2026-02-06",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",actual:"4.0",prev:"4.1"},
-  {date:"2026-02-11",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.4"},
-  {date:"2026-02-11",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.8",actual:"2.4",prev:"2.4"},
-  {date:"2026-02-11",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.2"},
-  {date:"2026-02-12",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.3"},
-  {date:"2026-02-17",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.5"},
-  {date:"2026-02-17",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.4"},
-  {date:"2026-02-18",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.0",prev:"49.8"},
-  {date:"2026-02-18",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.5",prev:"56.8"},
-  {date:"2026-02-20",time:"01:30",flag:"ð¯ðµ",name:"Japan CPI y/y",impact:"med",currency:"JPY",forecast:"3.5",prev:"3.6"},
-  {date:"2026-02-20",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"74.5",prev:"74.0"},
-  {date:"2026-02-24",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"105.0",prev:"104.5"},
-  {date:"2026-02-25",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"1.0",prev:"0.5"},
-  {date:"2026-02-27",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.2"},
-  {date:"2026-02-27",time:"15:45",flag:"ðºð¸",name:"Chicago PMI",impact:"low",currency:"USD",forecast:"40.5",prev:"36.9"},
+  // ─────────── FEBRUAR 2026 ───────────
+  {date:"2026-02-04",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"145",prev:"140"},
+  {date:"2026-02-05",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.2",prev:"54.1"},
+  {date:"2026-02-06",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.4",prev:"0.3"},
+  {date:"2026-02-06",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"160",actual:"-156",prev:"212"},
+  {date:"2026-02-06",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",actual:"4.0",prev:"4.1"},
+  {date:"2026-02-11",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.4"},
+  {date:"2026-02-11",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.8",actual:"2.4",prev:"2.4"},
+  {date:"2026-02-11",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.2"},
+  {date:"2026-02-12",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.3"},
+  {date:"2026-02-17",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.5"},
+  {date:"2026-02-17",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.4"},
+  {date:"2026-02-18",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.0",prev:"49.8"},
+  {date:"2026-02-18",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.5",prev:"56.8"},
+  {date:"2026-02-20",time:"01:30",flag:"JPY",name:"Japan CPI y/y",impact:"med",currency:"JPY",forecast:"3.5",prev:"3.6"},
+  {date:"2026-02-20",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"74.5",prev:"74.0"},
+  {date:"2026-02-24",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"105.0",prev:"104.5"},
+  {date:"2026-02-25",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"1.0",prev:"0.5"},
+  {date:"2026-02-27",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.2"},
+  {date:"2026-02-27",time:"15:45",flag:"USD",name:"Chicago PMI",impact:"low",currency:"USD",forecast:"40.5",prev:"36.9"},
 
-  // âââââââââââ MÃRZ 2026 âââââââââââ
-  {date:"2026-03-03",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.5",prev:"50.3"},
-  {date:"2026-03-04",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"148",prev:"145"},
-  {date:"2026-03-05",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.8",prev:"54.2"},
-  {date:"2026-03-06",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.3",prev:"0.4"},
-  {date:"2026-03-06",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"158",actual:"185",prev:"-156"},
-  {date:"2026-03-06",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",actual:"4.2",prev:"4.0"},
-  {date:"2026-03-11",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-03-11",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.7",actual:"3.3",prev:"2.4"},
-  {date:"2026-03-11",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.2"},
-  {date:"2026-03-12",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-03-17",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.3"},
-  {date:"2026-03-17",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-03-18",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.2",prev:"50.0"},
-  {date:"2026-03-18",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.0",prev:"56.5"},
-  {date:"2026-03-19",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"4.0",prev:"4.25"},
-  {date:"2026-03-19",time:"10:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"0.75",prev:"0.5"},
-  {date:"2026-03-20",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"75.0",prev:"74.5"},
-  {date:"2026-03-25",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.8",prev:"1.0"},
-  {date:"2026-03-25",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"105.5",prev:"105.0"},
-  {date:"2026-03-26",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"224"},
-  {date:"2026-03-27",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-03-27",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"2.3",prev:"2.4"},
-  {date:"2026-03-31",time:"01:50",flag:"ð¯ðµ",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"14",prev:"12"},
+  // ─────────── MÄRZ 2026 ───────────
+  {date:"2026-03-03",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.5",prev:"50.3"},
+  {date:"2026-03-04",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"148",prev:"145"},
+  {date:"2026-03-05",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.8",prev:"54.2"},
+  {date:"2026-03-06",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.3",prev:"0.4"},
+  {date:"2026-03-06",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"158",actual:"185",prev:"-156"},
+  {date:"2026-03-06",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",actual:"4.2",prev:"4.0"},
+  {date:"2026-03-11",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-03-11",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.7",actual:"3.3",prev:"2.4"},
+  {date:"2026-03-11",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.2"},
+  {date:"2026-03-12",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-03-17",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.3"},
+  {date:"2026-03-17",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-03-18",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.2",prev:"50.0"},
+  {date:"2026-03-18",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.0",prev:"56.5"},
+  {date:"2026-03-19",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"4.0",prev:"4.25"},
+  {date:"2026-03-19",time:"10:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"0.75",prev:"0.5"},
+  {date:"2026-03-20",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"75.0",prev:"74.5"},
+  {date:"2026-03-25",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.8",prev:"1.0"},
+  {date:"2026-03-25",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"105.5",prev:"105.0"},
+  {date:"2026-03-26",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"224"},
+  {date:"2026-03-27",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-03-27",time:"14:30",flag:"USD",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"2.3",prev:"2.4"},
+  {date:"2026-03-31",time:"01:50",flag:"JPY",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"14",prev:"12"},
 
-  // âââââââââââ APRIL 2026 âââââââââââ
-  {date:"2026-04-01",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.3",prev:"50.2"},
-  {date:"2026-04-01",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.8",prev:"50.5"},
-  {date:"2026-04-02",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"150",prev:"148"},
-  {date:"2026-04-03",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-04-03",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"155",prev:"158"},
-  {date:"2026-04-03",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",prev:"4.1"},
-  {date:"2026-04-03",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.0",prev:"53.8"},
-  {date:"2026-04-07",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.6",prev:"7.7"},
-  {date:"2026-04-10",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.3"},
-  {date:"2026-04-10",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.6",prev:"2.7"},
-  {date:"2026-04-10",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-04-11",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-04-14",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.4"},
-  {date:"2026-04-14",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-04-16",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"219"},
-  {date:"2026-04-16",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.5",prev:"50.3"},
-  {date:"2026-04-16",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.0",prev:"56.0"},
-  {date:"2026-04-17",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"75.5",prev:"75.0"},
-  {date:"2026-04-22",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"106.0",prev:"105.5"},
-  {date:"2026-04-23",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"0.8"},
-  {date:"2026-04-24",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-04-28",time:"10:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"0.75",prev:"0.75"},
-  {date:"2026-04-29",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"1.8",prev:"2.4"},
+  // ─────────── APRIL 2026 ───────────
+  {date:"2026-04-01",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.3",prev:"50.2"},
+  {date:"2026-04-01",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.8",prev:"50.5"},
+  {date:"2026-04-02",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"150",prev:"148"},
+  {date:"2026-04-03",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-04-03",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"155",prev:"158"},
+  {date:"2026-04-03",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",prev:"4.1"},
+  {date:"2026-04-03",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.0",prev:"53.8"},
+  {date:"2026-04-07",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.6",prev:"7.7"},
+  {date:"2026-04-10",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.3"},
+  {date:"2026-04-10",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.6",prev:"2.7"},
+  {date:"2026-04-10",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-04-11",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-04-14",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.4"},
+  {date:"2026-04-14",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-04-16",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"219"},
+  {date:"2026-04-16",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.5",prev:"50.3"},
+  {date:"2026-04-16",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"56.0",prev:"56.0"},
+  {date:"2026-04-17",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"75.5",prev:"75.0"},
+  {date:"2026-04-22",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"106.0",prev:"105.5"},
+  {date:"2026-04-23",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"0.8"},
+  {date:"2026-04-24",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-04-28",time:"10:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"0.75",prev:"0.75"},
+  {date:"2026-04-29",time:"14:30",flag:"USD",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"1.8",prev:"2.4"},
 
-  // âââââââââââ MAI 2026 âââââââââââ
-  {date:"2026-05-05",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.5",prev:"54.0"},
-  {date:"2026-05-06",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"148",prev:"150"},
-  {date:"2026-05-06",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"3.75",actual:"3.75",prev:"4.0"},
-  {date:"2026-05-07",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.4",prev:"7.6"},
-  {date:"2026-05-08",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.3"},
-  {date:"2026-05-08",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"130",actual:"115",prev:"185"},
-  {date:"2026-05-08",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",actual:"4.2",prev:"4.1"},
-  {date:"2026-05-13",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.2"},
-  {date:"2026-05-13",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.4",prev:"2.6"},
-  {date:"2026-05-13",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-05-14",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"-0.4"},
-  {date:"2026-05-14",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"228",prev:"241"},
-  {date:"2026-05-15",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"1.4"},
-  {date:"2026-05-15",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.5"},
-  {date:"2026-05-15",time:"15:15",flag:"ðºð¸",name:"Industrial Production m/m",impact:"low",currency:"USD",forecast:"0.1",prev:"-0.3"},
-  {date:"2026-05-16",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"55.0",prev:"52.2"},
-  {date:"2026-05-19",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"98.0",prev:"92.9"},
-  {date:"2026-05-21",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"225",prev:"228"},
-  {date:"2026-05-21",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.1",prev:"50.2"},
-  {date:"2026-05-21",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"52.0",prev:"51.4"},
-  {date:"2026-05-27",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"-1.0",prev:"9.2"},
-  {date:"2026-05-28",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Second Estimate)",impact:"high",currency:"USD",forecast:"-0.2",prev:"2.4"},
-  {date:"2026-05-28",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"222",prev:"225"},
-  {date:"2026-05-29",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.0"},
-  {date:"2026-05-29",time:"01:30",flag:"ð¯ðµ",name:"Tokyo CPI y/y",impact:"med",currency:"JPY",forecast:"3.3",prev:"3.4"},
+  // ─────────── MAI 2026 ───────────
+  {date:"2026-05-05",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.5",prev:"54.0"},
+  {date:"2026-05-06",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"148",prev:"150"},
+  {date:"2026-05-06",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"3.75",actual:"3.75",prev:"4.0"},
+  {date:"2026-05-07",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.4",prev:"7.6"},
+  {date:"2026-05-08",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",actual:"0.2",prev:"0.3"},
+  {date:"2026-05-08",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"130",actual:"115",prev:"185"},
+  {date:"2026-05-08",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",actual:"4.2",prev:"4.1"},
+  {date:"2026-05-13",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.2"},
+  {date:"2026-05-13",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.4",prev:"2.6"},
+  {date:"2026-05-13",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-05-14",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"-0.4"},
+  {date:"2026-05-14",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"228",prev:"241"},
+  {date:"2026-05-15",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"1.4"},
+  {date:"2026-05-15",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.5"},
+  {date:"2026-05-15",time:"15:15",flag:"USD",name:"Industrial Production m/m",impact:"low",currency:"USD",forecast:"0.1",prev:"-0.3"},
+  {date:"2026-05-16",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"55.0",prev:"52.2"},
+  {date:"2026-05-19",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"98.0",prev:"92.9"},
+  {date:"2026-05-21",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"225",prev:"228"},
+  {date:"2026-05-21",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.1",prev:"50.2"},
+  {date:"2026-05-21",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"52.0",prev:"51.4"},
+  {date:"2026-05-27",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"-1.0",prev:"9.2"},
+  {date:"2026-05-28",time:"14:30",flag:"USD",name:"GDP q/q (Second Estimate)",impact:"high",currency:"USD",forecast:"-0.2",prev:"2.4"},
+  {date:"2026-05-28",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"222",prev:"225"},
+  {date:"2026-05-29",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.0"},
+  {date:"2026-05-29",time:"01:30",flag:"JPY",name:"Tokyo CPI y/y",impact:"med",currency:"JPY",forecast:"3.3",prev:"3.4"},
 
-  // âââââââââââ JUNI 2026 âââââââââââ
-  {date:"2026-06-02",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.5",prev:"50.1"},
-  {date:"2026-06-03",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"145",prev:"148"},
-  {date:"2026-06-04",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.0",prev:"53.5"},
-  {date:"2026-06-04",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.3",prev:"7.4"},
-  {date:"2026-06-05",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-06-05",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"125",prev:"115"},
-  {date:"2026-06-05",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",prev:"4.1"},
-  {date:"2026-06-10",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.3"},
-  {date:"2026-06-10",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.2",prev:"2.3"},
-  {date:"2026-06-10",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.3"},
-  {date:"2026-06-11",time:"04:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.0",prev:"0.75"},
-  {date:"2026-06-11",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-06-12",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"222"},
-  {date:"2026-06-16",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-06-16",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-06-17",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.3",prev:"50.1"},
-  {date:"2026-06-17",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"52.5",prev:"52.0"},
-  {date:"2026-06-17",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"3.25",prev:"3.75"},
-  {date:"2026-06-19",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"218",prev:"220"},
-  {date:"2026-06-24",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"100.0",prev:"98.0"},
-  {date:"2026-06-25",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"-1.0"},
-  {date:"2026-06-26",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-06-26",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"-0.1",prev:"-0.2"},
-  {date:"2026-06-30",time:"01:50",flag:"ð¯ðµ",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"15",prev:"14"},
+  // ─────────── JUNI 2026 ───────────
+  {date:"2026-06-02",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.5",prev:"50.1"},
+  {date:"2026-06-03",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"145",prev:"148"},
+  {date:"2026-06-04",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.0",prev:"53.5"},
+  {date:"2026-06-04",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.3",prev:"7.4"},
+  {date:"2026-06-05",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-06-05",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"125",prev:"115"},
+  {date:"2026-06-05",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.1",prev:"4.1"},
+  {date:"2026-06-10",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.3"},
+  {date:"2026-06-10",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.2",prev:"2.3"},
+  {date:"2026-06-10",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.3"},
+  {date:"2026-06-11",time:"04:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.0",prev:"0.75"},
+  {date:"2026-06-11",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-06-12",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"220",prev:"222"},
+  {date:"2026-06-16",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-06-16",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-06-17",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.3",prev:"50.1"},
+  {date:"2026-06-17",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"52.5",prev:"52.0"},
+  {date:"2026-06-17",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"3.25",prev:"3.75"},
+  {date:"2026-06-19",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"218",prev:"220"},
+  {date:"2026-06-24",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"100.0",prev:"98.0"},
+  {date:"2026-06-25",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"-1.0"},
+  {date:"2026-06-26",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-06-26",time:"14:30",flag:"USD",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"-0.1",prev:"-0.2"},
+  {date:"2026-06-30",time:"01:50",flag:"JPY",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"15",prev:"14"},
 
-  // âââââââââââ JULI 2026 âââââââââââ
-  {date:"2026-07-01",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"143",prev:"145"},
-  {date:"2026-07-01",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.8",prev:"50.5"},
-  {date:"2026-07-02",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-07-02",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"120",prev:"125"},
-  {date:"2026-07-02",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.0",prev:"4.1"},
-  {date:"2026-07-07",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.5",prev:"53.0"},
-  {date:"2026-07-08",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.2",prev:"7.3"},
-  {date:"2026-07-10",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-07-10",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.1",prev:"2.2"},
-  {date:"2026-07-10",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-07-11",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-07-15",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-07-15",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-07-16",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.5",prev:"50.3"},
-  {date:"2026-07-16",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"53.0",prev:"52.5"},
-  {date:"2026-07-17",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"76.0",prev:"75.5"},
-  {date:"2026-07-22",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"102.0",prev:"100.0"},
-  {date:"2026-07-23",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"0.5"},
-  {date:"2026-07-24",time:"10:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.0",prev:"1.0"},
-  {date:"2026-07-25",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-07-29",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"2.0",prev:"1.8"},
-  {date:"2026-07-29",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"3.0",prev:"3.25"},
+  // ─────────── JULI 2026 ───────────
+  {date:"2026-07-01",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"143",prev:"145"},
+  {date:"2026-07-01",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"50.8",prev:"50.5"},
+  {date:"2026-07-02",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-07-02",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"120",prev:"125"},
+  {date:"2026-07-02",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.0",prev:"4.1"},
+  {date:"2026-07-07",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"53.5",prev:"53.0"},
+  {date:"2026-07-08",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.2",prev:"7.3"},
+  {date:"2026-07-10",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-07-10",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.1",prev:"2.2"},
+  {date:"2026-07-10",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-07-11",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-07-15",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-07-15",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-07-16",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.5",prev:"50.3"},
+  {date:"2026-07-16",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"53.0",prev:"52.5"},
+  {date:"2026-07-17",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"76.0",prev:"75.5"},
+  {date:"2026-07-22",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"102.0",prev:"100.0"},
+  {date:"2026-07-23",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"0.5"},
+  {date:"2026-07-24",time:"10:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.0",prev:"1.0"},
+  {date:"2026-07-25",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-07-29",time:"14:30",flag:"USD",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"2.0",prev:"1.8"},
+  {date:"2026-07-29",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"3.0",prev:"3.25"},
 
-  // âââââââââââ AUGUST 2026 âââââââââââ
-  {date:"2026-08-04",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.0",prev:"53.5"},
-  {date:"2026-08-05",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"140",prev:"143"},
-  {date:"2026-08-06",time:"14:30",flag:"ðºð¸",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"215",prev:"218"},
-  // ð£ CLAUDE UPDATE
-  {date:"2026-08-06",time:"09:00",flag:"ð£",name:"Claude Update â Neue Daten eintragen",impact:"claude",currency:"â",forecast:"â",prev:"â"},
-  {date:"2026-08-07",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-08-07",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"118",prev:"120"},
-  {date:"2026-08-07",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.0",prev:"4.0"},
-  {date:"2026-08-11",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.1",prev:"7.2"},
-  {date:"2026-08-12",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-08-12",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.1"},
-  {date:"2026-08-12",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-08-13",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-08-14",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-08-14",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-08-20",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.6",prev:"50.5"},
-  {date:"2026-08-20",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"53.5",prev:"53.0"},
-  {date:"2026-08-21",time:"16:00",flag:"ðºð¸",name:"Jackson Hole Speech (Fed Chair Powell)",impact:"high",currency:"USD",forecast:"",prev:""},
-  {date:"2026-08-22",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"76.5",prev:"76.0"},
-  {date:"2026-08-26",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"104.0",prev:"102.0"},
-  {date:"2026-08-27",time:"14:30",flag:"ðºð¸",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"0.5"},
-  {date:"2026-08-28",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  // ─────────── AUGUST 2026 ───────────
+  {date:"2026-08-04",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.0",prev:"53.5"},
+  {date:"2026-08-05",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"140",prev:"143"},
+  {date:"2026-08-06",time:"14:30",flag:"USD",name:"Initial Jobless Claims",impact:"low",currency:"USD",forecast:"215",prev:"218"},
+  // ● CLAUDE UPDATE
+  {date:"2026-08-06",time:"09:00",flag:"●",name:"Claude Update — Neue Daten eintragen",impact:"claude",currency:"—",forecast:"—",prev:"—"},
+  {date:"2026-08-07",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-08-07",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"118",prev:"120"},
+  {date:"2026-08-07",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.0",prev:"4.0"},
+  {date:"2026-08-11",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.1",prev:"7.2"},
+  {date:"2026-08-12",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-08-12",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.1"},
+  {date:"2026-08-12",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-08-13",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-08-14",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-08-14",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-08-20",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.6",prev:"50.5"},
+  {date:"2026-08-20",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"53.5",prev:"53.0"},
+  {date:"2026-08-21",time:"16:00",flag:"USD",name:"Jackson Hole Speech (Fed Chair Powell)",impact:"high",currency:"USD",forecast:"",prev:""},
+  {date:"2026-08-22",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"76.5",prev:"76.0"},
+  {date:"2026-08-26",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"104.0",prev:"102.0"},
+  {date:"2026-08-27",time:"14:30",flag:"USD",name:"Durable Goods Orders m/m",impact:"low",currency:"USD",forecast:"0.5",prev:"0.5"},
+  {date:"2026-08-28",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
 
-  // âââââââââââ SEPTEMBER 2026 âââââââââââ
-  {date:"2026-09-01",time:"01:50",flag:"ð¯ðµ",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"15",prev:"15"},
-  {date:"2026-09-01",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.0",prev:"50.8"},
-  {date:"2026-09-02",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"138",prev:"140"},
-  {date:"2026-09-03",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.2",prev:"54.0"},
-  {date:"2026-09-04",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-09-04",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"115",prev:"118"},
-  {date:"2026-09-04",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.0",prev:"4.0"},
-  {date:"2026-09-09",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.0",prev:"7.1"},
-  {date:"2026-09-10",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-09-10",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.1"},
-  {date:"2026-09-10",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-09-11",time:"04:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.25",prev:"1.0"},
-  {date:"2026-09-11",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-09-15",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-09-15",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-09-17",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.7",prev:"50.6"},
-  {date:"2026-09-17",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"54.0",prev:"53.5"},
-  {date:"2026-09-17",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"2.75",prev:"3.0"},
-  {date:"2026-09-25",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-09-30",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"2.1",prev:"2.0"},
+  // ─────────── SEPTEMBER 2026 ───────────
+  {date:"2026-09-01",time:"01:50",flag:"JPY",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"15",prev:"15"},
+  {date:"2026-09-01",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.0",prev:"50.8"},
+  {date:"2026-09-02",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"138",prev:"140"},
+  {date:"2026-09-03",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.2",prev:"54.0"},
+  {date:"2026-09-04",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-09-04",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"115",prev:"118"},
+  {date:"2026-09-04",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"4.0",prev:"4.0"},
+  {date:"2026-09-09",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"7.0",prev:"7.1"},
+  {date:"2026-09-10",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-09-10",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.1"},
+  {date:"2026-09-10",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-09-11",time:"04:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.25",prev:"1.0"},
+  {date:"2026-09-11",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-09-15",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-09-15",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-09-17",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.7",prev:"50.6"},
+  {date:"2026-09-17",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"54.0",prev:"53.5"},
+  {date:"2026-09-17",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"2.75",prev:"3.0"},
+  {date:"2026-09-25",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-09-30",time:"14:30",flag:"USD",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"2.1",prev:"2.0"},
 
-  // âââââââââââ OKTOBER 2026 âââââââââââ
-  {date:"2026-10-01",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.2",prev:"51.0"},
-  {date:"2026-10-02",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-10-02",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"112",prev:"115"},
-  {date:"2026-10-02",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"3.9",prev:"4.0"},
-  {date:"2026-10-07",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.5",prev:"54.2"},
-  {date:"2026-10-07",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"6.9",prev:"7.0"},
-  {date:"2026-10-09",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-10-09",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.0"},
-  {date:"2026-10-09",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-10-13",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-10-15",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.3"},
-  {date:"2026-10-15",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-10-16",time:"00:30",flag:"ð¯ðµ",name:"Japan CPI y/y",impact:"med",currency:"JPY",forecast:"2.8",prev:"3.0"},
-  {date:"2026-10-16",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.8",prev:"50.7"},
-  {date:"2026-10-16",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"54.2",prev:"54.0"},
-  {date:"2026-10-17",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"77.0",prev:"76.5"},
-  {date:"2026-10-23",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"106.0",prev:"104.0"},
-  {date:"2026-10-28",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"2.5",prev:"2.75"},
-  {date:"2026-10-28",time:"10:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.25",prev:"1.25"},
-  {date:"2026-10-30",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-10-30",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"2.2",prev:"2.1"},
+  // ─────────── OKTOBER 2026 ───────────
+  {date:"2026-10-01",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.2",prev:"51.0"},
+  {date:"2026-10-02",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-10-02",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"112",prev:"115"},
+  {date:"2026-10-02",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"3.9",prev:"4.0"},
+  {date:"2026-10-07",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.5",prev:"54.2"},
+  {date:"2026-10-07",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"6.9",prev:"7.0"},
+  {date:"2026-10-09",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-10-09",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.0"},
+  {date:"2026-10-09",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-10-13",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-10-15",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.3"},
+  {date:"2026-10-15",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-10-16",time:"00:30",flag:"JPY",name:"Japan CPI y/y",impact:"med",currency:"JPY",forecast:"2.8",prev:"3.0"},
+  {date:"2026-10-16",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"50.8",prev:"50.7"},
+  {date:"2026-10-16",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"54.2",prev:"54.0"},
+  {date:"2026-10-17",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"77.0",prev:"76.5"},
+  {date:"2026-10-23",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"106.0",prev:"104.0"},
+  {date:"2026-10-28",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"2.5",prev:"2.75"},
+  {date:"2026-10-28",time:"10:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.25",prev:"1.25"},
+  {date:"2026-10-30",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-10-30",time:"14:30",flag:"USD",name:"GDP q/q (Advance)",impact:"high",currency:"USD",forecast:"2.2",prev:"2.1"},
 
-  // âââââââââââ NOVEMBER 2026 âââââââââââ
-  {date:"2026-11-03",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.5",prev:"51.2"},
-  {date:"2026-11-04",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"135",prev:"138"},
-  {date:"2026-11-05",time:"16:00",flag:"ðºð¸",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.8",prev:"54.5"},
-  // ð£ CLAUDE UPDATE
-  {date:"2026-11-06",time:"09:00",flag:"ð£",name:"Claude Update â Neue Daten eintragen",impact:"claude",currency:"â",forecast:"â",prev:"â"},
-  {date:"2026-11-06",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-11-06",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"110",prev:"112"},
-  {date:"2026-11-06",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"3.9",prev:"3.9"},
-  {date:"2026-11-10",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"6.8",prev:"6.9"},
-  {date:"2026-11-12",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-11-12",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.0"},
-  {date:"2026-11-12",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-11-13",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-11-17",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.4"},
-  {date:"2026-11-17",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.3"},
-  {date:"2026-11-19",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"51.0",prev:"50.8"},
-  {date:"2026-11-19",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"54.5",prev:"54.2"},
-  {date:"2026-11-21",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"77.5",prev:"77.0"},
-  {date:"2026-11-25",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-11-25",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Second Estimate)",impact:"high",currency:"USD",forecast:"2.2",prev:"2.2"},
-  {date:"2026-11-25",time:"16:00",flag:"ðºð¸",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"108.0",prev:"106.0"},
+  // ─────────── NOVEMBER 2026 ───────────
+  {date:"2026-11-03",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.5",prev:"51.2"},
+  {date:"2026-11-04",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"135",prev:"138"},
+  {date:"2026-11-05",time:"16:00",flag:"USD",name:"ISM Services PMI",impact:"med",currency:"USD",forecast:"54.8",prev:"54.5"},
+  // ● CLAUDE UPDATE
+  {date:"2026-11-06",time:"09:00",flag:"●",name:"Claude Update — Neue Daten eintragen",impact:"claude",currency:"—",forecast:"—",prev:"—"},
+  {date:"2026-11-06",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-11-06",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"110",prev:"112"},
+  {date:"2026-11-06",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"3.9",prev:"3.9"},
+  {date:"2026-11-10",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"6.8",prev:"6.9"},
+  {date:"2026-11-12",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-11-12",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.0"},
+  {date:"2026-11-12",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-11-13",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-11-17",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.4"},
+  {date:"2026-11-17",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.3"},
+  {date:"2026-11-19",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"51.0",prev:"50.8"},
+  {date:"2026-11-19",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"54.5",prev:"54.2"},
+  {date:"2026-11-21",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"77.5",prev:"77.0"},
+  {date:"2026-11-25",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-11-25",time:"14:30",flag:"USD",name:"GDP q/q (Second Estimate)",impact:"high",currency:"USD",forecast:"2.2",prev:"2.2"},
+  {date:"2026-11-25",time:"16:00",flag:"USD",name:"CB Consumer Confidence",impact:"med",currency:"USD",forecast:"108.0",prev:"106.0"},
 
-  // âââââââââââ DEZEMBER 2026 âââââââââââ
-  {date:"2026-12-01",time:"16:00",flag:"ðºð¸",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.5",prev:"51.5"},
-  {date:"2026-12-02",time:"14:30",flag:"ðºð¸",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"132",prev:"135"},
-  {date:"2026-12-04",time:"14:30",flag:"ðºð¸",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
-  {date:"2026-12-04",time:"14:30",flag:"ðºð¸",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"108",prev:"110"},
-  {date:"2026-12-04",time:"14:30",flag:"ðºð¸",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"3.9",prev:"3.9"},
-  {date:"2026-12-09",time:"16:00",flag:"ðºð¸",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"6.7",prev:"6.8"},
-  {date:"2026-12-10",time:"14:30",flag:"ðºð¸",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-12-10",time:"14:30",flag:"ðºð¸",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.0"},
-  {date:"2026-12-10",time:"14:30",flag:"ðºð¸",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-12-11",time:"14:30",flag:"ðºð¸",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-12-15",time:"14:30",flag:"ðºð¸",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.5",prev:"0.4"},
-  {date:"2026-12-15",time:"14:30",flag:"ðºð¸",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.4"},
-  {date:"2026-12-16",time:"15:45",flag:"ðºð¸",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"51.2",prev:"51.0"},
-  {date:"2026-12-16",time:"15:45",flag:"ðºð¸",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"55.0",prev:"54.5"},
-  {date:"2026-12-16",time:"20:00",flag:"ðºð¸",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"2.25",prev:"2.5"},
-  {date:"2026-12-18",time:"04:00",flag:"ð¯ðµ",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.5",prev:"1.25"},
-  {date:"2026-12-19",time:"16:00",flag:"ðºð¸",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"78.0",prev:"77.5"},
-  {date:"2026-12-23",time:"14:30",flag:"ðºð¸",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
-  {date:"2026-12-23",time:"14:30",flag:"ðºð¸",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"2.2",prev:"2.2"},
-  {date:"2026-12-23",time:"16:00",flag:"ðºð¸",name:"Revised UoM Consumer Sentiment",impact:"low",currency:"USD",forecast:"78.0",prev:"78.0"},
-  {date:"2026-12-30",time:"01:50",flag:"ð¯ðµ",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"16",prev:"15"},
+  // ─────────── DEZEMBER 2026 ───────────
+  {date:"2026-12-01",time:"16:00",flag:"USD",name:"ISM Manufacturing PMI",impact:"med",currency:"USD",forecast:"51.5",prev:"51.5"},
+  {date:"2026-12-02",time:"14:30",flag:"USD",name:"ADP Non-Farm Employment Change",impact:"low",currency:"USD",forecast:"132",prev:"135"},
+  {date:"2026-12-04",time:"14:30",flag:"USD",name:"Average Hourly Earnings m/m",impact:"med",currency:"USD",forecast:"0.3",prev:"0.3"},
+  {date:"2026-12-04",time:"14:30",flag:"USD",name:"Non-Farm Employment Change",impact:"high",currency:"USD",forecast:"108",prev:"110"},
+  {date:"2026-12-04",time:"14:30",flag:"USD",name:"Unemployment Rate",impact:"med",currency:"USD",forecast:"3.9",prev:"3.9"},
+  {date:"2026-12-09",time:"16:00",flag:"USD",name:"JOLTS Job Openings",impact:"med",currency:"USD",forecast:"6.7",prev:"6.8"},
+  {date:"2026-12-10",time:"14:30",flag:"USD",name:"CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-12-10",time:"14:30",flag:"USD",name:"CPI y/y",impact:"high",currency:"USD",forecast:"2.0",prev:"2.0"},
+  {date:"2026-12-10",time:"14:30",flag:"USD",name:"Core CPI m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-12-11",time:"14:30",flag:"USD",name:"PPI m/m",impact:"med",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-12-15",time:"14:30",flag:"USD",name:"Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.5",prev:"0.4"},
+  {date:"2026-12-15",time:"14:30",flag:"USD",name:"Core Retail Sales m/m",impact:"med",currency:"USD",forecast:"0.4",prev:"0.4"},
+  {date:"2026-12-16",time:"15:45",flag:"USD",name:"Flash Manufacturing PMI",impact:"low",currency:"USD",forecast:"51.2",prev:"51.0"},
+  {date:"2026-12-16",time:"15:45",flag:"USD",name:"Flash Services PMI",impact:"low",currency:"USD",forecast:"55.0",prev:"54.5"},
+  {date:"2026-12-16",time:"20:00",flag:"USD",name:"FOMC Statement",impact:"high",currency:"USD",forecast:"2.25",prev:"2.5"},
+  {date:"2026-12-18",time:"04:00",flag:"JPY",name:"BOJ Interest Rate Decision",impact:"high",currency:"JPY",forecast:"1.5",prev:"1.25"},
+  {date:"2026-12-19",time:"16:00",flag:"USD",name:"Prelim UoM Consumer Sentiment",impact:"med",currency:"USD",forecast:"78.0",prev:"77.5"},
+  {date:"2026-12-23",time:"14:30",flag:"USD",name:"Core PCE Price Index m/m",impact:"high",currency:"USD",forecast:"0.2",prev:"0.2"},
+  {date:"2026-12-23",time:"14:30",flag:"USD",name:"GDP q/q (Third Estimate)",impact:"high",currency:"USD",forecast:"2.2",prev:"2.2"},
+  {date:"2026-12-23",time:"16:00",flag:"USD",name:"Revised UoM Consumer Sentiment",impact:"low",currency:"USD",forecast:"78.0",prev:"78.0"},
+  {date:"2026-12-30",time:"01:50",flag:"JPY",name:"Tankan Large Manufacturers Index",impact:"med",currency:"JPY",forecast:"16",prev:"15"},
 
-  // ð£ CLAUDE UPDATES 2027
-  {date:"2027-02-06",time:"09:00",flag:"ð£",name:"Claude Update â Neue Daten eintragen",impact:"claude",currency:"â",forecast:"â",prev:"â"},
-  {date:"2027-05-06",time:"09:00",flag:"ð£",name:"Claude Update â Neue Daten eintragen",impact:"claude",currency:"â",forecast:"â",prev:"â"},
+  // ● CLAUDE UPDATES 2027
+  {date:"2027-02-06",time:"09:00",flag:"●",name:"Claude Update — Neue Daten eintragen",impact:"claude",currency:"—",forecast:"—",prev:"—"},
+  {date:"2027-05-06",time:"09:00",flag:"●",name:"Claude Update — Neue Daten eintragen",impact:"claude",currency:"—",forecast:"—",prev:"—"},
 ];
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// MARKTKONTEXT â Punkt 2
+// ══════════════════════════════════════════════
+// MARKTKONTEXT — Punkt 2
 // Erkennt automatisch den aktuellen Marktmodus
 // und passt alle Signale entsprechend an
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 const KONTEXT = {
   modus: 'neutral',      // bull | bear | neutral
-  einpreisung: 'normal', // stark | normal | schwach â Punkt 3
+  einpreisung: 'normal', // stark | normal | schwach — Punkt 3
   description: ''
 };
 
 function berechneKontext(){
-  // Einfache zuverlÃ¤ssige Logik:
+  // Einfache zuverlässige Logik:
   // FOMC senkt Zinsen = Bull-Modus (Fed-Put aktiv)
-  // FOMC erhÃ¶ht = Bear-Modus
-  // Alles andere = neutral â Einzelsignale entscheiden
+  // FOMC erhöht = Bear-Modus
+  // Alles andere = neutral → Einzelsignale entscheiden
 
   const fomcEvs = EVENTS.filter(e=>e.name.includes('FOMC')&&e.prev&&e.forecast);
 
@@ -499,63 +499,63 @@ function berechneKontext(){
     const pv = parseFloat(fomcEvs[0].prev||'4.25');
 
     if(fc < pv){
-      // Fed senkt â Bull-Modus
+      // Fed senkt → Bull-Modus
       KONTEXT.modus = 'bull';
-      KONTEXT.description = `Fed senkt Zinsen ${pv}%â${fc}% â Zinssenkungszyklus â Risk-on`;
+      KONTEXT.description = `Fed senkt Zinsen ${pv}%→${fc}% → Zinssenkungszyklus → Risk-on`;
     } else if(fc > pv){
-      // Fed erhÃ¶ht â Bear-Modus
+      // Fed erhöht → Bear-Modus
       KONTEXT.modus = 'bear';
-      KONTEXT.description = `Fed erhÃ¶ht Zinsen ${pv}%â${fc}% â LiquiditÃ¤t sinkt â Risk-off`;
+      KONTEXT.description = `Fed erhöht Zinsen ${pv}%→${fc}% → Liquidität sinkt → Risk-off`;
     } else {
-      // Zinsen stabil â neutral, Einzelsignale entscheiden
+      // Zinsen stabil → neutral, Einzelsignale entscheiden
       KONTEXT.modus = 'neutral';
-      KONTEXT.description = `Fed Pause bei ${fc}% â Einzelsignale entscheidend`;
+      KONTEXT.description = `Fed Pause bei ${fc}% → Einzelsignale entscheidend`;
     }
   } else {
     KONTEXT.modus = 'neutral';
-    KONTEXT.description = 'Kein FOMC-Signal verfÃ¼gbar';
+    KONTEXT.description = 'Kein FOMC-Signal verfügbar';
   }
 
-  // Einpreisung: nur zÃ¤hlen wie viele Senkungen bereits passiert
+  // Einpreisung: nur zählen wie viele Senkungen bereits passiert
   const senkungen = EVENTS.filter(e=>e.name.includes('FOMC')&&e.actual&&e.prev&&
     parseFloat(e.actual)<parseFloat(e.prev)).length;
   KONTEXT.einpreisung = senkungen>=3?'stark':senkungen>=1?'normal':'schwach';
-  if(senkungen>=3) KONTEXT.description += ' Â· â  Viele Senkungen eingepreist';
+  if(senkungen>=3) KONTEXT.description += ' · ! Viele Senkungen eingepreist';
 }
 
 function kontextBoost(s){
   // Kontext beeinflusst NUR neutrale Signale
-  // Klare BUY/SELL Signale bleiben immer erhalten â nie Ã¼berschreiben!
+  // Klare BUY/SELL Signale bleiben immer erhalten — nie überschreiben!
   if(s==='neut'){
     if(KONTEXT.modus==='bull') return 'buy';
     if(KONTEXT.modus==='bear') return 'sell';
   }
-  // BUY bleibt BUY, SELL bleibt SELL â Kontext dreht nie ein klares Signal um
+  // BUY bleibt BUY, SELL bleibt SELL — Kontext dreht nie ein klares Signal um
   return s;
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 // VORWERT AUTO-UPDATE
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 function aktualisiereVorwerte(){
   const sorted = [...EVENTS].sort((a,b)=>a.date.localeCompare(b.date));
   const letzteActuals = {};
   sorted.forEach(ev=>{
     const key = ev.name.toLowerCase().slice(0,25);
-    if(letzteActuals[key] && (!ev.prev || ev.prev==='â')){
+    if(letzteActuals[key] && (!ev.prev || ev.prev==='—')){
       ev.prev = letzteActuals[key];
     }
-    if(ev.actual && ev.actual!=='' && ev.actual!=='â'){
+    if(ev.actual && ev.actual!=='' && ev.actual!=='—'){
       letzteActuals[key] = ev.actual;
     }
   });
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 // SIGNAL ENGINE
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 function pZ(s){
-  if(s===null||s===undefined||s===''||s==='â')return null;
+  if(s===null||s===undefined||s===''||s==='—')return null;
   const n=parseFloat(String(s).replace(/[^0-9.\-]/g,''));
   return isNaN(n)?null:n;
 }
@@ -570,242 +570,242 @@ function sig(ev){
 
   let nq='neut',ym='neut',nk='neut',gr=[],hi=[];
 
-  // ââââââââââââââââââââââââââââââââââââââââââââââ
-  // ANALYST-LOGIK â wie ein echter Marktanalyst
-  // Kernfrage 1: Was bedeutet das fÃ¼r die Fed?
-  // Kernfrage 2: Ãberraschung vs. Erwartung?
+  // ══════════════════════════════════════════════
+  // ANALYST-LOGIK — wie ein echter Marktanalyst
+  // Kernfrage 1: Was bedeutet das für die Fed?
+  // Kernfrage 2: Überraschung vs. Erwartung?
   // Kernfrage 3: Wie ist der aktuelle Marktmodus?
-  // ââââââââââââââââââââââââââââââââââââââââââââââ
+  // ══════════════════════════════════════════════
 
-  // Hilfsfunktion: ÃberraschungsgrÃ¶Ãe berechnen
+  // Hilfsfunktion: Überraschungsgröße berechnen
   function ueberraschung(actual, prognose, schwelle){
     if(actual===null||prognose===null) return 0;
     return Math.abs(actual-prognose) > schwelle ? (actual<prognose?1:-1) : 0;
-    // positiv = besser als erwartet fÃ¼r BUY, negativ = schlechter
+    // positiv = besser als erwartet für BUY, negativ = schlechter
   }
 
-  // NFP â SchwÃ¤cher als Prognose = Fed senkt = BUY
-  // StÃ¤rker als Prognose = Fed bleibt = SELL
+  // NFP — Schwächer als Prognose = Fed senkt = BUY
+  // Stärker als Prognose = Fed bleibt = SELL
   // Analyst: NFP ist der wichtigste monatliche Indikator
   if(n.includes('non-farm')||n.includes('nonfarm')||n.includes('payroll')){
     if(v1!==null&&v2!==null){
       const d=Math.abs(v1-v2);
       const schwach=v1<v2;
       if(d<8){
-        // Zu nahe an Erwartung â kein klares Signal aber Kontext entscheidet
+        // Zu nahe an Erwartung — kein klares Signal aber Kontext entscheidet
         nq=ym=nk=KONTEXT.modus==='bull'?'buy':'neut';
-        gr=[`NFP ${v1}K â ${v2}K (Î${d}K) â im Rahmen der Erwartungen`,
+        gr=[`NFP ${v1}K ≈ ${v2}K (Δ${d}K) — im Rahmen der Erwartungen`,
             KONTEXT.modus==='bull'?'Bull-Markt: leicht BUY':'Kein klares Signal'];
       } else if(d>=8&&d<20){
-        // Moderate Ãberraschung
+        // Moderate Überraschung
         nq=ym=nk=schwach?'buy':'sell';
         gr=[schwach
-          ?`NFP ${v1}K < ${v2}K (Î${d}K) â Moderate SchwÃ¤che â Fed dovish â BUY`
-          :`NFP ${v1}K > ${v2}K (Î${d}K) â Moderate StÃ¤rke â Fed hawkish â SELL`,
+          ?`NFP ${v1}K < ${v2}K (Δ${d}K) → Moderate Schwäche → Fed dovish → BUY`
+          :`NFP ${v1}K > ${v2}K (Δ${d}K) → Moderate Stärke → Fed hawkish → SELL`,
           `Basis: ${basis}`];
       } else {
-        // GroÃe Ãberraschung â starkes Signal
+        // Große Überraschung — starkes Signal
         nq=ym=nk=schwach?'buy':'sell';
         gr=[schwach
-          ?`NFP ${v1}K << ${v2}K (Î${d}K) â STARKE SchwÃ¤che â Fed senkt aggressiv â starkes BUY`
-          :`NFP ${v1}K >> ${v2}K (Î${d}K) â STARKE StÃ¤rke â Fed bleibt â starkes SELL`,
+          ?`NFP ${v1}K << ${v2}K (Δ${d}K) → STARKE Schwäche → Fed senkt aggressiv → starkes BUY`
+          :`NFP ${v1}K >> ${v2}K (Δ${d}K) → STARKE Stärke → Fed bleibt → starkes SELL`,
           `Basis: ${basis}`];
       }
     } else {
-      // Kein Actual â Prognose vs. Vorwert
+      // Kein Actual — Prognose vs. Vorwert
       if(fc!==null&&pv!==null){
         const d=Math.abs(fc-pv), schwach=fc<pv;
         nq=ym=nk=schwach?'buy':'sell';
         gr=[schwach
-          ?`Prognose ${fc}K < Vorwert ${pv}K â AbschwÃ¤chung erwartet â BUY-Tendenz`
-          :`Prognose ${fc}K > Vorwert ${pv}K â StÃ¤rke erwartet â SELL-Tendenz`,
-          'â¡ Signal basiert auf Prognose â wird nach Release aktualisiert'];
+          ?`Prognose ${fc}K < Vorwert ${pv}K → Abschwächung erwartet → BUY-Tendenz`
+          :`Prognose ${fc}K > Vorwert ${pv}K → Stärke erwartet → SELL-Tendenz`,
+          '! Signal basiert auf Prognose — wird nach Release aktualisiert'];
       } else {
         nq=ym=nk=KONTEXT.modus==='bull'?'buy':'neut';
         gr=[KONTEXT.modus==='bull'
-          ?'NFP: Bull-Modus aktiv â BUY-Tendenz vor Release'
+          ?'NFP: Bull-Modus aktiv → BUY-Tendenz vor Release'
           :'NFP: Warte auf Prognose und Actual'];
       }
     }
   }
 
-  // AVERAGE HOURLY EARNINGS â Hohe LÃ¶hne = Lohninflation = Fed hawkish = SELL
+  // AVERAGE HOURLY EARNINGS — Hohe Löhne = Lohninflation = Fed hawkish = SELL
   else if(n.includes('hourly earnings')){
     if(v1!==null&&v2!==null){
       const hoch=v1>v2;
       nq=ym=hoch?'sell':'buy'; nk='neut';
       gr=[hoch
-        ?`LÃ¶hne ${v1}% > ${v2}% â Lohninflation steigt â Fed bleibt hawkish â SELL`
-        :`LÃ¶hne ${v1}% â¤ ${v2}% â Lohndruck sinkt â Fed kann senken â BUY`,
+        ?`Löhne ${v1}% > ${v2}% → Lohninflation steigt → Fed bleibt hawkish → SELL`
+        :`Löhne ${v1}% ≤ ${v2}% → Lohndruck sinkt → Fed kann senken → BUY`,
         `Basis: ${basis}`];
-    }else{nq=ym='buy';nk='neut';gr=['Hourly Earnings: Stabiler Lohndruck erwartet â neutral/buy'];}
+    }else{nq=ym='buy';nk='neut';gr=['Hourly Earnings: Stabiler Lohndruck erwartet → neutral/buy'];}
   }
 
-  // UNEMPLOYMENT RATE â HÃ¶here Arbeitslosigkeit = Fed senkt = BUY
+  // UNEMPLOYMENT RATE — Höhere Arbeitslosigkeit = Fed senkt = BUY
   else if(n.includes('unemployment rate')){
     if(v1!==null&&v2!==null){
       const schlechter=v1>v2;
       nq=ym=schlechter?'buy':'sell'; nk='neut';
       gr=[schlechter
-        ?`Arbeitslosigkeit ${v1}% > ${v2}% â Arbeitsmarkt schwÃ¤cher â Fed senkt â BUY`
-        :`Arbeitslosigkeit ${v1}% < ${v2}% â Jobmarkt zu stark â Fed hawkish â SELL`,
+        ?`Arbeitslosigkeit ${v1}% > ${v2}% → Arbeitsmarkt schwächer → Fed senkt → BUY`
+        :`Arbeitslosigkeit ${v1}% < ${v2}% → Jobmarkt zu stark → Fed hawkish → SELL`,
         `Basis: ${basis}`];
     }else{nq=ym='neut';nk='neut';gr=['Unemployment: Stabil erwartet'];}
   }
 
-  // CORE CPI â KÃ¼hler = Fed senkt = BUY | HeiÃer = Fed bleibt = SELL
+  // CORE CPI — Kühler = Fed senkt = BUY | Heißer = Fed bleibt = SELL
   else if(n.includes('core cpi')){
     if(v1!==null&&v2!==null){
       const kuehl=v1<v2, gleich=v1===v2;
       nq=ym=kuehl||gleich?'buy':'sell'; nk='neut';
       gr=[kuehl
-        ?`Core CPI ${v1}% < ${v2}% â Kerninflation sinkt â Fed senkt frÃ¼her â BUY`
+        ?`Core CPI ${v1}% < ${v2}% → Kerninflation sinkt → Fed senkt früher → BUY`
         :gleich
-        ?`Core CPI ${v1}% = ${v2}% â stabil â Fed-Erwartungen unverÃ¤ndert â leicht BUY`
-        :`Core CPI ${v1}% > ${v2}% â Kerninflation steigt â Fed bleibt â SELL`,
+        ?`Core CPI ${v1}% = ${v2}% → stabil → Fed-Erwartungen unverändert → leicht BUY`
+        :`Core CPI ${v1}% > ${v2}% → Kerninflation steigt → Fed bleibt → SELL`,
         `Basis: ${basis}`];
     }else if(fc!==null&&pv!==null){
       const kuehl=fc<=pv; nq=ym=kuehl?'buy':'sell'; nk='neut';
-      gr=[kuehl?`Prognose ${fc}% â¤ Vorwert ${pv}% â Kerninflation stabil/sinkend â BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% â Kerninflation steigt â SELL-Tendenz`];
-    }else{nq=ym='buy';nk='neut';gr=['Core CPI: Stabile Inflation erwartet â BUY-Tendenz'];}
+      gr=[kuehl?`Prognose ${fc}% ≤ Vorwert ${pv}% → Kerninflation stabil/sinkend → BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% → Kerninflation steigt → SELL-Tendenz`];
+    }else{nq=ym='buy';nk='neut';gr=['Core CPI: Stabile Inflation erwartet → BUY-Tendenz'];}
   }
 
-  // CPI â KÃ¼hler = Fed senkt = BUY
+  // CPI — Kühler = Fed senkt = BUY
   else if(n.includes('cpi')){
     if(cur==='JPY'||n.includes('japan')||n.includes('tokyo')){
       if(v1!==null&&v2!==null){
         const heiss=v1>v2; nk=heiss?'sell':'buy'; nq=ym='neut';
         gr=[heiss
-          ?`Japan CPI ${v1}% > ${v2}% â BOJ erhÃ¶ht Zinsen â Yen stÃ¤rkt â SELL NK`
-          :`Japan CPI ${v1}% < ${v2}% â BOJ-Druck sinkt â Yen schwÃ¤cher â BUY NK`,
+          ?`Japan CPI ${v1}% > ${v2}% → BOJ erhöht Zinsen → Yen stärkt → SELL NK`
+          :`Japan CPI ${v1}% < ${v2}% → BOJ-Druck sinkt → Yen schwächer → BUY NK`,
           `Basis: ${basis}`];
       }else{nk='neut';nq=ym='neut';gr=['Japan CPI: Warte auf Daten'];}
     }else{
       if(v1!==null&&v2!==null){
         const d=Math.abs(v1-v2), kuehl=v1<v2;
-        if(d<0.05){nq=ym=nk='neut';gr=[`CPI Î${d.toFixed(2)}% â zu gering, kein Signal`];}
+        if(d<0.05){nq=ym=nk='neut';gr=[`CPI Δ${d.toFixed(2)}% — zu gering, kein Signal`];}
         else{
           nq=ym=kuehl?'buy':'sell'; nk=kuehl?'buy':'neut';
           gr=[kuehl
-            ?`CPI ${v1}% < ${v2}% â Inflation sinkt â Fed senkt Zinsen â BUY NQ/YM`
-            :`CPI ${v1}% > ${v2}% â Inflation steigt â Fed bleibt hawkish â SELL NQ/YM`,
+            ?`CPI ${v1}% < ${v2}% → Inflation sinkt → Fed senkt Zinsen → BUY NQ/YM`
+            :`CPI ${v1}% > ${v2}% → Inflation steigt → Fed bleibt hawkish → SELL NQ/YM`,
             `Basis: ${basis}`];
         }
       }else if(fc!==null&&pv!==null){
         const kuehl=fc<pv; nq=ym=kuehl?'buy':'sell'; nk=kuehl?'buy':'neut';
-        gr=[kuehl?`Prognose ${fc}% < Vorwert ${pv}% â Inflation sinkt â BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% â Inflation steigt â SELL-Tendenz`];
-      }else{nq=ym='buy';nk='neut';gr=['CPI: Sinkende Inflation erwartet â BUY-Tendenz'];}
+        gr=[kuehl?`Prognose ${fc}% < Vorwert ${pv}% → Inflation sinkt → BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% → Inflation steigt → SELL-Tendenz`];
+      }else{nq=ym='buy';nk='neut';gr=['CPI: Sinkende Inflation erwartet → BUY-Tendenz'];}
     }
   }
 
-  // CORE PCE â Feds wichtigster Indikator â kÃ¼hler = BUY
+  // CORE PCE — Feds wichtigster Indikator — kühler = BUY
   else if(n.includes('core pce')||n.includes('personal consumption')){
     if(v1!==null&&v2!==null){
       const kuehl=v1<=v2;
       nq=ym=kuehl?'buy':'sell'; nk='neut';
       gr=[kuehl
-        ?`PCE ${v1}% â¤ ${v2}% â Feds Lieblingsindikator sinkt â Zinssenkung nÃ¤her â BUY`
-        :`PCE ${v1}% > ${v2}% â Feds Indikator steigt â Fed zÃ¶gert â SELL`,
+        ?`PCE ${v1}% ≤ ${v2}% → Feds Lieblingsindikator sinkt → Zinssenkung näher → BUY`
+        :`PCE ${v1}% > ${v2}% → Feds Indikator steigt → Fed zögert → SELL`,
         `Basis: ${basis}`];
     }else if(fc!==null&&pv!==null){
       const kuehl=fc<=pv; nq=ym=kuehl?'buy':'sell'; nk='neut';
-      gr=[kuehl?`Prognose ${fc}% â¤ Vorwert ${pv}% â PCE stabil â BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% â PCE steigt â SELL-Tendenz`];
-    }else{nq=ym='buy';nk='neut';gr=['PCE: Sinkende Tendenz â BUY-Tendenz'];}
+      gr=[kuehl?`Prognose ${fc}% ≤ Vorwert ${pv}% → PCE stabil → BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% → PCE steigt → SELL-Tendenz`];
+    }else{nq=ym='buy';nk='neut';gr=['PCE: Sinkende Tendenz → BUY-Tendenz'];}
   }
 
-  // FOMC â Analyst: Zinssenkung = mehr LiquiditÃ¤t = NQ steigt
-  // GrÃ¶Ãe der Senkung und Dot Plot entscheidend
+  // FOMC — Analyst: Zinssenkung = mehr Liquidität = NQ steigt
+  // Größe der Senkung und Dot Plot entscheidend
   else if(n.includes('fomc')){
     if(v1!==null&&v2!==null){
       const senkung=v2-v1; // positiv = Senkung
-      if(senkung>=0.5){nq=ym=nk='buy';gr=[`FOMC: GroÃe Senkung -${senkung}% â ${v2}%â${v1}% â starke LiquiditÃ¤tszufuhr â starkes BUY`];}
-      else if(senkung>0){nq=ym=nk='buy';gr=[`FOMC: Senkung -${senkung}% â ${v2}%â${v1}% â LiquiditÃ¤t steigt â BUY NQ/YM/NK`];}
+      if(senkung>=0.5){nq=ym=nk='buy';gr=[`FOMC: Große Senkung -${senkung}% → ${v2}%→${v1}% → starke Liquiditätszufuhr → starkes BUY`];}
+      else if(senkung>0){nq=ym=nk='buy';gr=[`FOMC: Senkung -${senkung}% → ${v2}%→${v1}% → Liquidität steigt → BUY NQ/YM/NK`];}
       else if(senkung===0){
         nq=ym=nk=KONTEXT.modus==='bull'?'buy':'neut';
-        gr=['FOMC: Zinsen unverÃ¤ndert â Markt schaut auf Dot Plot & Statement',
-            KONTEXT.modus==='bull'?'Bull-Modus: Pause = weitere Senkung kommt â BUY':'Pause = abwarten'];
-        hi=['Hawkisher Ton â SELL | Dovisher Ton â BUY'];
+        gr=['FOMC: Zinsen unverändert → Markt schaut auf Dot Plot & Statement',
+            KONTEXT.modus==='bull'?'Bull-Modus: Pause = weitere Senkung kommt → BUY':'Pause = abwarten'];
+        hi=['Hawkisher Ton → SELL | Dovisher Ton → BUY'];
       }
-      else{nq=ym=nk='sell';gr=[`FOMC: ErhÃ¶hung +${-senkung}% â ${v2}%â${v1}% â LiquiditÃ¤t sinkt â SELL`];}
+      else{nq=ym=nk='sell';gr=[`FOMC: Erhöhung +${-senkung}% → ${v2}%→${v1}% → Liquidität sinkt → SELL`];}
     }else if(fc!==null&&pv!==null){
       const senkung=pv-fc;
-      if(senkung>0){nq=ym=nk='buy';gr=[`FOMC: Senkung auf ${fc}% erwartet (von ${pv}%) â BUY-Tendenz`];}
-      else{nq=ym=nk=KONTEXT.modus==='bull'?'buy':'neut';gr=['FOMC: Pause erwartet â Statement entscheidend'];}
+      if(senkung>0){nq=ym=nk='buy';gr=[`FOMC: Senkung auf ${fc}% erwartet (von ${pv}%) → BUY-Tendenz`];}
+      else{nq=ym=nk=KONTEXT.modus==='bull'?'buy':'neut';gr=['FOMC: Pause erwartet → Statement entscheidend'];}
       hi=['Statement & Dot Plot wichtiger als Zinsentscheid selbst'];
     }else{
       nq=ym=nk='buy';
-      gr=['FOMC: Zinssenkungszyklus aktiv â jede Senkung = BUY NQ/YM/NK'];
+      gr=['FOMC: Zinssenkungszyklus aktiv → jede Senkung = BUY NQ/YM/NK'];
       hi=['Statement-Wortlaut entscheidend'];
     }
   }
 
-  // BOJ â ZinserhÃ¶hung = Yen stÃ¤rkt = SELL NK
+  // BOJ — Zinserhöhung = Yen stärkt = SELL NK
   else if(n.includes('boj')||(n.includes('interest rate')&&cur==='JPY')){
     if(v1!==null&&v2!==null){
-      if(v1>v2){nq=ym='neut';nk='sell';gr=[`BOJ: ZinserhÃ¶hung ${v2}% â ${v1}% â Yen stÃ¤rkt â Exporteure leiden â SELL NK`];}
-      else if(v1===v2){nq=ym='neut';nk='neut';gr=['BOJ: Zinsen unverÃ¤ndert â NK neutral'];hi=['NÃ¤chste ErhÃ¶hung erwartet â mittelfristig SELL NK'];}
-      else{nq=ym='neut';nk='buy';gr=[`BOJ: Zinssenkung â Yen schwÃ¤cher â Exporteure profitieren â BUY NK`];}
+      if(v1>v2){nq=ym='neut';nk='sell';gr=[`BOJ: Zinserhöhung ${v2}% → ${v1}% → Yen stärkt → Exporteure leiden → SELL NK`];}
+      else if(v1===v2){nq=ym='neut';nk='neut';gr=['BOJ: Zinsen unverändert → NK neutral'];hi=['Nächste Erhöhung erwartet → mittelfristig SELL NK'];}
+      else{nq=ym='neut';nk='buy';gr=[`BOJ: Zinssenkung → Yen schwächer → Exporteure profitieren → BUY NK`];}
     }else{
       nq=ym='neut';nk='sell';
-      gr=['BOJ: ZinserhÃ¶hungszyklus â Tendenz SELL NK'];
-      hi=['Pause mÃ¶glich â NK neutral'];
+      gr=['BOJ: Zinserhöhungszyklus → Tendenz SELL NK'];
+      hi=['Pause möglich → NK neutral'];
     }
   }
 
-  // TANKAN â Bessere Stimmung = BUY NK
+  // TANKAN — Bessere Stimmung = BUY NK
   else if(n.includes('tankan')){
     if(v1!==null&&v2!==null){
       const besser=v1>v2; nk=besser?'buy':'sell'; nq=ym='neut';
       gr=[besser
-        ?`Tankan ${v1} > ${v2} â Unternehmensstimmung besser â Wirtschaft stark â BUY NK`
-        :`Tankan ${v1} < ${v2} â Stimmung trÃ¼bt â Wirtschaft schwÃ¤cher â SELL NK`,
+        ?`Tankan ${v1} > ${v2} → Unternehmensstimmung besser → Wirtschaft stark → BUY NK`
+        :`Tankan ${v1} < ${v2} → Stimmung trübt → Wirtschaft schwächer → SELL NK`,
         `Basis: ${basis}`];
-    }else{nk='buy';nq=ym='neut';gr=['Tankan: Positive Tendenz erwartet â BUY NK'];}
+    }else{nk='buy';nq=ym='neut';gr=['Tankan: Positive Tendenz erwartet → BUY NK'];}
   }
 
-  // ISM MANUFACTURING â Unter 50 = Rezession = Fed senkt = BUY (paradox aber real)
+  // ISM MANUFACTURING — Unter 50 = Rezession = Fed senkt = BUY (paradox aber real)
   else if(n.includes('ism manuf')||n.includes('ism mfg')||(n.includes('ism')&&n.includes('manuf'))){
     if(v1!==null){
-      if(v1<45){nq=ym='buy';nk='neut';gr=[`ISM ${v1} â starke Kontraktion â Rezessionsangst â Fed senkt aggressiv â BUY`];}
-      else if(v1<50){nq=ym='neut';nk='neut';gr=[`ISM ${v1} < 50 â leichte Kontraktion â Fed-Druck sinkt â neutral`];}
-      else{const beat=v2!==null?v1>v2:true;nq=ym=beat?'sell':'neut';nk='neut';gr=[`ISM ${v1} > 50 â Expansion â Wirtschaft stark â Fed bleibt â ${beat?'SELL-Tendenz':'neutral'}`];}
+      if(v1<45){nq=ym='buy';nk='neut';gr=[`ISM ${v1} — starke Kontraktion → Rezessionsangst → Fed senkt aggressiv → BUY`];}
+      else if(v1<50){nq=ym='neut';nk='neut';gr=[`ISM ${v1} < 50 → leichte Kontraktion → Fed-Druck sinkt → neutral`];}
+      else{const beat=v2!==null?v1>v2:true;nq=ym=beat?'sell':'neut';nk='neut';gr=[`ISM ${v1} > 50 → Expansion → Wirtschaft stark → Fed bleibt → ${beat?'SELL-Tendenz':'neutral'}`];}
     }else{nq=ym='neut';gr=['ISM Manufacturing: Warte auf Daten'];}
   }
 
-  // ISM SERVICES â StÃ¤rke hÃ¤lt Fed zurÃ¼ck = SELL
+  // ISM SERVICES — Stärke hält Fed zurück = SELL
   else if(n.includes('ism serv')||(n.includes('ism')&&n.includes('serv'))){
     if(v1!==null){
-      if(v1>55){nq=ym='sell';nk='neut';gr=[`ISM Services ${v1} > 55 â Dienstleistungen boomen â Inflation bleibt â Fed hawkish â SELL`];}
-      else if(v1>50){nq=ym='neut';nk='neut';gr=[`ISM Services ${v1} > 50 â moderate Expansion â kein klares Signal`];}
-      else{nq=ym='buy';nk='neut';gr=[`ISM Services ${v1} < 50 â AbschwÃ¤chung â Fed senkt â BUY`];}
+      if(v1>55){nq=ym='sell';nk='neut';gr=[`ISM Services ${v1} > 55 → Dienstleistungen boomen → Inflation bleibt → Fed hawkish → SELL`];}
+      else if(v1>50){nq=ym='neut';nk='neut';gr=[`ISM Services ${v1} > 50 → moderate Expansion → kein klares Signal`];}
+      else{nq=ym='buy';nk='neut';gr=[`ISM Services ${v1} < 50 → Abschwächung → Fed senkt → BUY`];}
     }else{nq=ym='neut';gr=['ISM Services: Warte auf Daten'];}
   }
 
-  // PMI (Flash) â schwÃ¤cherer Einfluss
+  // PMI (Flash) — schwächerer Einfluss
   else if(n.includes('pmi')||n.includes('flash')){
     if(v1!==null){
       const schwach=v1<50;
       nq=ym=schwach?'buy':'neut'; nk='neut';
-      gr=[schwach?`PMI ${v1}<50 â Kontraktion â Fed senkt â BUY-Tendenz`:`PMI ${v1}>50 â Expansion â neutral`,`Basis: ${basis}`];
-    }else{nq=ym='neut';gr=['PMI: Vorindikator â schwaches Signal'];}
+      gr=[schwach?`PMI ${v1}<50 → Kontraktion → Fed senkt → BUY-Tendenz`:`PMI ${v1}>50 → Expansion → neutral`,`Basis: ${basis}`];
+    }else{nq=ym='neut';gr=['PMI: Vorindikator — schwaches Signal'];}
   }
 
-  // RETAIL SALES â Schwach = Konsument erschÃ¶pft = Fed senkt = BUY
+  // RETAIL SALES — Schwach = Konsument erschöpft = Fed senkt = BUY
   else if(n.includes('retail sales')||n.includes('core retail')){
     if(v1!==null&&v2!==null){
       const schwach=v1<v2;
       nq=ym=schwach?'buy':'sell'; nk='neut';
       gr=[schwach
-        ?`Retail ${v1}% < ${v2}% â Konsum schwÃ¤cher â Fed senkt â BUY`
-        :`Retail ${v1}% > ${v2}% â Konsum stark â Inflation bleibt â Fed hawkish â SELL`,
+        ?`Retail ${v1}% < ${v2}% → Konsum schwächer → Fed senkt → BUY`
+        :`Retail ${v1}% > ${v2}% → Konsum stark → Inflation bleibt → Fed hawkish → SELL`,
         `Basis: ${basis}`];
     }else if(fc!==null&&pv!==null){
       const schwach=fc<pv; nq=ym=schwach?'buy':'sell'; nk='neut';
-      gr=[schwach?`Prognose ${fc}% < Vorwert ${pv}% â BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% â SELL-Tendenz`];
+      gr=[schwach?`Prognose ${fc}% < Vorwert ${pv}% → BUY-Tendenz`:`Prognose ${fc}% > Vorwert ${pv}% → SELL-Tendenz`];
     }else{nq=ym='neut';gr=['Retail Sales: Warte auf Daten'];}
   }
 
-  // GDP â Analyst: Negative GDP = Rezession = Fed-Put = BUY (paradox aber real)
+  // GDP — Analyst: Negative GDP = Rezession = Fed-Put = BUY (paradox aber real)
   // Starkes GDP = Fed bleibt = SELL
   // Wichtig: 2 negative Quartale = technische Rezession = Fed muss handeln
   else if(n.includes('gdp')||n.includes('gross domestic')){
@@ -813,138 +813,138 @@ function sig(ev){
       const negativ=v1<0, sehrNegativ=v1<-1, schwach=v1<v2;
       if(sehrNegativ){
         nq=ym='buy';nk='buy';
-        gr=[`BIP ${v1}% stark negativ â Rezession â Fed-Put aktiviert â aggressiv BUY NQ/YM/NK`,
-           'Fed wird Zinsen schnell senken â MÃ¤rkte antizipieren das'];
+        gr=[`BIP ${v1}% stark negativ → Rezession → Fed-Put aktiviert → aggressiv BUY NQ/YM/NK`,
+           'Fed wird Zinsen schnell senken — Märkte antizipieren das'];
       } else if(negativ){
         nq=ym='buy';nk='neut';
-        gr=[`BIP ${v1}% negativ â Rezessionsrisiko â Fed senkt â BUY NQ/YM`,`Basis: ${basis}`];
+        gr=[`BIP ${v1}% negativ → Rezessionsrisiko → Fed senkt → BUY NQ/YM`,`Basis: ${basis}`];
       } else if(schwach){
         nq=ym='buy';nk='neut';
-        gr=[`BIP ${v1}% < ${v2}% â Wachstum verlangsamt â Fed dovish â BUY`,`Basis: ${basis}`];
+        gr=[`BIP ${v1}% < ${v2}% → Wachstum verlangsamt → Fed dovish → BUY`,`Basis: ${basis}`];
       } else {
         nq=ym='sell';nk='neut';
-        gr=[`BIP ${v1}% > ${v2}% â Wirtschaft stark â Fed kein Grund zu senken â SELL`,`Basis: ${basis}`];
+        gr=[`BIP ${v1}% > ${v2}% → Wirtschaft stark → Fed kein Grund zu senken → SELL`,`Basis: ${basis}`];
       }
     }else if(fc!==null){
-      if(fc<0){nq=ym='buy';nk='neut';gr=[`BIP-Prognose ${fc}% negativ â Fed-Put erwartet â BUY-Tendenz`];}
-      else if(fc<pv){nq=ym='buy';nk='neut';gr=[`BIP-Prognose ${fc}% < Vorwert ${pv}% â AbschwÃ¤chung â BUY-Tendenz`];}
-      else{nq=ym='neut';nk='neut';gr=[`BIP-Prognose ${fc}% stabil â neutral`];}
+      if(fc<0){nq=ym='buy';nk='neut';gr=[`BIP-Prognose ${fc}% negativ → Fed-Put erwartet → BUY-Tendenz`];}
+      else if(fc<pv){nq=ym='buy';nk='neut';gr=[`BIP-Prognose ${fc}% < Vorwert ${pv}% → Abschwächung → BUY-Tendenz`];}
+      else{nq=ym='neut';nk='neut';gr=[`BIP-Prognose ${fc}% stabil → neutral`];}
     }else{nq=ym='neut';gr=['BIP: Warte auf Daten'];}
   }
 
-  // PPI â KÃ¼hler = CPI folgt = Fed senkt = BUY
+  // PPI — Kühler = CPI folgt = Fed senkt = BUY
   else if(n.includes('ppi')||n.includes('producer price')){
     if(v1!==null&&v2!==null){
       const kuehl=v1<v2;
       nq=ym=kuehl?'buy':'neut'; nk='neut';
       gr=[kuehl
-        ?`PPI ${v1}% < ${v2}% â Erzeugerpreise sinken â CPI folgt â Fed senkt â BUY-Tendenz`
-        :`PPI ${v1}% > ${v2}% â Erzeugerpreise steigen â Inflation bleibt â neutral/SELL-Tendenz`,
+        ?`PPI ${v1}% < ${v2}% → Erzeugerpreise sinken → CPI folgt → Fed senkt → BUY-Tendenz`
+        :`PPI ${v1}% > ${v2}% → Erzeugerpreise steigen → Inflation bleibt → neutral/SELL-Tendenz`,
         `Basis: ${basis}`];
-    }else{nq=ym='neut';gr=['PPI: Vorindikator fÃ¼r CPI'];}
+    }else{nq=ym='neut';gr=['PPI: Vorindikator für CPI'];}
   }
 
-  // JACKSON HOLE â Fed-Chair Rede, historisch oft dovish = BUY
+  // JACKSON HOLE — Fed-Chair Rede, historisch oft dovish = BUY
   else if(n.includes('jackson')||n.includes('powell')){
     nq=ym=nk='buy';
-    gr=['Jackson Hole: Fed-Chair Rede â historisch oft dovish â BUY-Tendenz','Markt erwartet Zinssenkungssignal'];
-    hi=['Hawkisher Ton â sofort SELL â Signal Ã¤ndert sich mit Wortlaut'];
+    gr=['Jackson Hole: Fed-Chair Rede → historisch oft dovish → BUY-Tendenz','Markt erwartet Zinssenkungssignal'];
+    hi=['Hawkisher Ton → sofort SELL — Signal ändert sich mit Wortlaut'];
   }
 
-  // MICHIGAN / UOM SENTIMENT â Schwach = Rezessionsangst = Fed senkt = BUY
+  // MICHIGAN / UOM SENTIMENT — Schwach = Rezessionsangst = Fed senkt = BUY
   else if(n.includes('uom')||n.includes('michigan')||n.includes('sentiment')){
     if(v1!==null&&v2!==null){
       const schwach=v1<v2;
       nq=ym=schwach?'buy':'sell'; nk='neut';
       gr=[schwach
-        ?`Sentiment ${v1} < ${v2} â Verbraucher pessimistisch â Rezessionsangst â Fed senkt â BUY`
-        :`Sentiment ${v1} > ${v2} â Verbraucher optimistisch â Konsum bleibt â Fed hawkish â SELL`,
+        ?`Sentiment ${v1} < ${v2} → Verbraucher pessimistisch → Rezessionsangst → Fed senkt → BUY`
+        :`Sentiment ${v1} > ${v2} → Verbraucher optimistisch → Konsum bleibt → Fed hawkish → SELL`,
         `Basis: ${basis}`];
     }else{nq=ym='neut';gr=['Sentiment: Warte auf Daten'];}
   }
 
-  // CB CONSUMER CONFIDENCE â wie Michigan
+  // CB CONSUMER CONFIDENCE — wie Michigan
   else if(n.includes('cb consumer')||n.includes('consumer confidence')){
     if(v1!==null&&v2!==null){
       const schwach=v1<v2;
       nq=ym=schwach?'buy':'sell'; nk='neut';
       gr=[schwach
-        ?`CB Confidence ${v1} < ${v2} â Vertrauen sinkt â Wirtschaft schwÃ¤cher â BUY`
-        :`CB Confidence ${v1} > ${v2} â Vertrauen steigt â Konsum bleibt stark â SELL`,
+        ?`CB Confidence ${v1} < ${v2} → Vertrauen sinkt → Wirtschaft schwächer → BUY`
+        :`CB Confidence ${v1} > ${v2} → Vertrauen steigt → Konsum bleibt stark → SELL`,
         `Basis: ${basis}`];
     }else{nq=ym='neut';gr=['CB Confidence: Warte auf Daten'];}
   }
 
-  // JOLTS â Weniger offene Stellen = Jobmarkt kÃ¼hlt = Fed senkt = BUY
+  // JOLTS — Weniger offene Stellen = Jobmarkt kühlt = Fed senkt = BUY
   else if(n.includes('jolts')||n.includes('job opening')){
     if(v1!==null&&v2!==null){
       const kuehl=v1<v2;
       nq=ym=kuehl?'buy':'sell'; nk='neut';
       gr=[kuehl
-        ?`JOLTS ${v1}M < ${v2}M â Jobmarkt kÃ¼hlt â Fed senkt â BUY`
-        :`JOLTS ${v1}M > ${v2}M â Jobmarkt heiÃ â Fed bleibt â SELL`,
+        ?`JOLTS ${v1}M < ${v2}M → Jobmarkt kühlt → Fed senkt → BUY`
+        :`JOLTS ${v1}M > ${v2}M → Jobmarkt heiß → Fed bleibt → SELL`,
         `Basis: ${basis}`];
     }else{nq=ym='neut';gr=['JOLTS: Warte auf Daten'];}
   }
 
-  // ADP â Vorindikator NFP
+  // ADP — Vorindikator NFP
   else if(n.includes('adp')){
     if(v1!==null&&v2!==null){
       const schwach=v1<v2;
       nq=ym=schwach?'buy':'sell'; nk='neut';
       gr=[schwach
-        ?`ADP ${v1}K < ${v2}K â Jobmarkt kÃ¼hlt â NFP-Vorindikator: BUY-Tendenz`
-        :`ADP ${v1}K > ${v2}K â Jobmarkt stark â NFP-Vorindikator: SELL-Tendenz`,
-        'Vorindikator â NFP morgen/Ã¼bermorgen entscheidend'];
+        ?`ADP ${v1}K < ${v2}K → Jobmarkt kühlt → NFP-Vorindikator: BUY-Tendenz`
+        :`ADP ${v1}K > ${v2}K → Jobmarkt stark → NFP-Vorindikator: SELL-Tendenz`,
+        'Vorindikator — NFP morgen/übermorgen entscheidend'];
     }else{nq=ym='neut';nk='neut';gr=['ADP: NFP-Vorindikator'];}
   }
 
-  // JOBLESS CLAIMS â Mehr Claims = Jobmarkt schwÃ¤cher = Fed senkt = BUY
+  // JOBLESS CLAIMS — Mehr Claims = Jobmarkt schwächer = Fed senkt = BUY
   else if(n.includes('jobless')||n.includes('initial claim')){
     if(v1!==null&&v2!==null){
       const mehr=v1>v2;
       nq=ym=mehr?'buy':'sell'; nk='neut';
       gr=[mehr
-        ?`Claims ${v1}K > ${v2}K â mehr Arbeitslose â Wirtschaft kÃ¼hlt â Fed senkt â BUY`
-        :`Claims ${v1}K < ${v2}K â Jobmarkt stark â Fed bleibt â SELL`,
+        ?`Claims ${v1}K > ${v2}K → mehr Arbeitslose → Wirtschaft kühlt → Fed senkt → BUY`
+        :`Claims ${v1}K < ${v2}K → Jobmarkt stark → Fed bleibt → SELL`,
         `Basis: ${basis}`, 'Vorindikator'];
     }else{nq=ym='neut';gr=['Jobless Claims: Vorindikator'];}
   }
 
-  // DURABLE GOODS â Schwach = Investitionen sinken = Fed senkt = BUY
+  // DURABLE GOODS — Schwach = Investitionen sinken = Fed senkt = BUY
   else if(n.includes('durable')){
     if(v1!==null&&v2!==null){
       const schwach=v1<v2;
       nq=ym=schwach?'buy':'neut'; nk='neut';
       gr=[schwach
-        ?`Durable Goods ${v1}% < ${v2}% â Investitionen sinken â Fed senkt â leicht BUY`
-        :`Durable Goods ${v1}% > ${v2}% â Investitionen stark â neutral`,
+        ?`Durable Goods ${v1}% < ${v2}% → Investitionen sinken → Fed senkt → leicht BUY`
+        :`Durable Goods ${v1}% > ${v2}% → Investitionen stark → neutral`,
         `Basis: ${basis}`];
     }else{nq=ym='neut';gr=['Durable Goods: Vorindikator'];}
   }
 
-  // INDUSTRIAL PRODUCTION â Schwach = Fed senkt = BUY
+  // INDUSTRIAL PRODUCTION — Schwach = Fed senkt = BUY
   else if(n.includes('industrial')){
     if(v1!==null&&v2!==null){
       const schwach=v1<v2;
       nq=ym=schwach?'buy':'neut'; nk='neut';
-      gr=[schwach?`Industrial ${v1}% < ${v2}% â Produktion sinkt â leicht BUY`:`Industrial ${v1}% > ${v2}% â neutral`];
+      gr=[schwach?`Industrial ${v1}% < ${v2}% → Produktion sinkt → leicht BUY`:`Industrial ${v1}% > ${v2}% → neutral`];
     }else{nq=ym='neut';gr=['Industrial Production: Warte auf Daten'];}
   }
 
   // DEFAULT
-  else{nq=ym=nk='neut';gr=['Kein automatisches Signal fÃ¼r diesen Event'];}
+  else{nq=ym=nk='neut';gr=['Kein automatisches Signal für diesen Event'];}
 
   // Kontext-Boost
   nq=kontextBoost(nq);ym=kontextBoost(ym);nk=kontextBoost(nk);
   return{nq,ym,nk,gr,hi,basis};
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 // KOMBINIERTE NFP-ANALYSE
 // Forschung zeigt: NFP + Wages + Unemployment zusammen
-// viel zuverlÃ¤ssiger als NFP alleine
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// viel zuverlässiger als NFP alleine
+// ══════════════════════════════════════════════
 function kombinierteNFPAnalyse(alleEvs){
   const nfp = alleEvs.find(e=>e.name.includes('Non-Farm'));
   const wages = alleEvs.find(e=>e.name.includes('Hourly Earnings'));
@@ -953,26 +953,26 @@ function kombinierteNFPAnalyse(alleEvs){
 
   let buyScore=0, sellScore=0, signale=[];
 
-  // NFP (Gewicht 3 â wichtigster Faktor)
+  // NFP (Gewicht 3 — wichtigster Faktor)
   const nfpAc=parseFloat(nfp.actual||''), nfpFc=parseFloat(nfp.forecast||''), nfpPv=parseFloat(nfp.prev||'');
   const nfpV1=!isNaN(nfpAc)&&!isNaN(nfpFc)?nfpAc:nfpFc;
   const nfpV2=!isNaN(nfpAc)&&!isNaN(nfpFc)?nfpFc:nfpPv;
   if(!isNaN(nfpV1)&&!isNaN(nfpV2)){
     const d=Math.abs(nfpV1-nfpV2);
     if(d>=8){
-      if(nfpV1<nfpV2){buyScore+=3*(d>20?1.5:1);signale.push(`NFP ${nfpV1}K < ${nfpV2}K â schwach â BUY`);}
-      else{sellScore+=3*(d>20?1.5:1);signale.push(`NFP ${nfpV1}K > ${nfpV2}K â stark â SELL`);}
-    }else{signale.push(`NFP Î${d}K â im Rahmen`);}
+      if(nfpV1<nfpV2){buyScore+=3*(d>20?1.5:1);signale.push(`NFP ${nfpV1}K < ${nfpV2}K → schwach → BUY`);}
+      else{sellScore+=3*(d>20?1.5:1);signale.push(`NFP ${nfpV1}K > ${nfpV2}K → stark → SELL`);}
+    }else{signale.push(`NFP Δ${d}K — im Rahmen`);}
   }
 
-  // Wages (Gewicht 2 â Lohninflation kritisch)
+  // Wages (Gewicht 2 — Lohninflation kritisch)
   if(wages){
     const wAc=parseFloat(wages.actual||''),wFc=parseFloat(wages.forecast||''),wPv=parseFloat(wages.prev||'');
     const wV1=!isNaN(wAc)&&!isNaN(wFc)?wAc:wFc, wV2=!isNaN(wAc)&&!isNaN(wFc)?wFc:wPv;
     if(!isNaN(wV1)&&!isNaN(wV2)){
-      if(wV1<wV2){buyScore+=2;signale.push(`Wages ${wV1}% < ${wV2}% â Lohndruck sinkt â BUY`);}
-      else if(wV1>wV2){sellScore+=2;signale.push(`Wages ${wV1}% > ${wV2}% â Lohninflation â SELL`);}
-      else{signale.push(`Wages ${wV1}% = ${wV2}% â stabil`);}
+      if(wV1<wV2){buyScore+=2;signale.push(`Wages ${wV1}% < ${wV2}% → Lohndruck sinkt → BUY`);}
+      else if(wV1>wV2){sellScore+=2;signale.push(`Wages ${wV1}% > ${wV2}% → Lohninflation → SELL`);}
+      else{signale.push(`Wages ${wV1}% = ${wV2}% → stabil`);}
     }
   }
 
@@ -981,8 +981,8 @@ function kombinierteNFPAnalyse(alleEvs){
     const uAc=parseFloat(unemp.actual||''),uFc=parseFloat(unemp.forecast||''),uPv=parseFloat(unemp.prev||'');
     const uV1=!isNaN(uAc)&&!isNaN(uFc)?uAc:uFc, uV2=!isNaN(uAc)&&!isNaN(uFc)?uFc:uPv;
     if(!isNaN(uV1)&&!isNaN(uV2)&&Math.abs(uV1-uV2)>=0.1){
-      if(uV1>uV2){buyScore+=1;signale.push(`Unemployment ${uV1}% > ${uV2}% â steigt â Fed dovish â BUY`);}
-      else{sellScore+=1;signale.push(`Unemployment ${uV1}% < ${uV2}% â sinkt â Fed hawkish â SELL`);}
+      if(uV1>uV2){buyScore+=1;signale.push(`Unemployment ${uV1}% > ${uV2}% → steigt → Fed dovish → BUY`);}
+      else{sellScore+=1;signale.push(`Unemployment ${uV1}% < ${uV2}% → sinkt → Fed hawkish → SELL`);}
     }
   }
 
@@ -990,24 +990,24 @@ function kombinierteNFPAnalyse(alleEvs){
   const total=buyScore+sellScore;
   if(total===0) return null;
   const richtung=buyScore>sellScore?'buy':sellScore>buyScore?'sell':'neut';
-  const staerke=(buyScore+sellScore)>=5?'â¡ Starkes':(buyScore+sellScore)>=3?'Moderates':'Schwaches';
+  const staerke=(buyScore+sellScore)>=5?'! Starkes':(buyScore+sellScore)>=3?'Moderates':'Schwaches';
   return{richtung, buyScore, sellScore, signale, staerke,
     label:`${staerke} NFP-Signal (${buyScore} BUY vs ${sellScore} SELL Punkte)`};
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// TREND-MOMENTUM â letzten 3 gleichen Events anschauen
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
+// TREND-MOMENTUM — letzten 3 gleichen Events anschauen
+// ══════════════════════════════════════════════
 function trendMomentum(eventName){
-  // Alle vergangenen Events mit Actual fÃ¼r diesen Typ
+  // Alle vergangenen Events mit Actual für diesen Typ
   const vergangen = EVENTS
-    .filter(e=>e.name===eventName && e.actual && e.actual!=='â' && e.prev)
+    .filter(e=>e.name===eventName && e.actual && e.actual!=='—' && e.prev)
     .sort((a,b)=>b.date.localeCompare(a.date))
     .slice(0,3);
 
   if(vergangen.length<2) return 0; // nicht genug Daten
 
-  // Trend: positiv = Wert sinkt (gut fÃ¼r BUY bei Arbeitsmarkt/Inflation)
+  // Trend: positiv = Wert sinkt (gut für BUY bei Arbeitsmarkt/Inflation)
   // negativ = Wert steigt
   let trendScore=0;
   vergangen.forEach(ev=>{
@@ -1017,9 +1017,9 @@ function trendMomentum(eventName){
   return trendScore; // +3 = 3x in Folge gesunken, -3 = 3x gestiegen
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// SIGNALSTÃRKE â schwach / moderat / stark
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
+// SIGNALSTÄRKE — schwach / moderat / stark
+// ══════════════════════════════════════════════
 function signalStaerke(ev, sigRichtung){
   if(sigRichtung==='neut') return '';
   const n=ev.name;
@@ -1039,14 +1039,14 @@ function signalStaerke(ev, sigRichtung){
   else{schwach=0.1;stark=0.5;}
 
   if(vergleich>=stark || momentumBoost){
-    return momentum!==0?` Â· Trend ${momentum>0?'ââ':'ââ'} (${Math.abs(momentum)}x in Folge)`:'';
+    return momentum!==0?` · Trend ${momentum>0?'vv':'^^'} (${Math.abs(momentum)}x in Folge)`:'';
   }
   return '';
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-// SIGNAL HIERARCHIE â 1-2-3 Regel
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
+// SIGNAL HIERARCHIE — 1-2-3 Regel
+// ══════════════════════════════════════════════
 function hierarchieSignal(evs){
   const sv={buy:1,sell:-1,neut:0};
 
@@ -1054,49 +1054,49 @@ function hierarchieSignal(evs){
   const midEvs=evs.filter(e=>e.impact==='med');
   const lowEvs=evs.filter(e=>e.impact==='low');
 
-  // Stufe 1+2: High-Impact vorhanden â nur die zÃ¤hlen
-  // Gewichtung: groÃes Signal = mehr Gewicht
+  // Stufe 1+2: High-Impact vorhanden → nur die zählen
+  // Gewichtung: großes Signal = mehr Gewicht
   if(highEvs.length>0){
     let nqS=0,ymS=0,nkS=0,totalW=0;
     highEvs.forEach(ev=>{
       const s=sig(ev);
       const ac=parseFloat(ev.actual||''),fc=parseFloat(ev.forecast||''),pv=parseFloat(ev.prev||'');
       const delta=!isNaN(ac)&&!isNaN(fc)?Math.abs(ac-fc):!isNaN(fc)&&!isNaN(pv)?Math.abs(fc-pv):0;
-      // Momentum-Boost: wenn 2+ Events in Folge gleiche Richtung â mehr Gewicht
+      // Momentum-Boost: wenn 2+ Events in Folge gleiche Richtung → mehr Gewicht
       const momentum=trendMomentum(ev.name);
       const w = 1 + (delta>20?0.5:0) + (Math.abs(momentum)>=2?0.5:0);
       nqS+=sv[s.nq]*w; ymS+=sv[s.ym]*w; nkS+=sv[s.nk]*w; totalW+=w;
     });
     const avg=v=>v/totalW;
-    // SignalstÃ¤rke fÃ¼r Label
+    // Signalstärke für Label
     const maxScore=Math.max(Math.abs(avg(nqS)),Math.abs(avg(ymS)));
-    const staerke=maxScore>0.7?'â¡ Starkes':maxScore>0.4?'Moderates':'Schwaches';
+    const staerke=maxScore>0.7?'! Starkes':maxScore>0.4?'Moderates':'Schwaches';
     const d=v=>v>0.2?'buy':v<-0.2?'sell':'neut';
     return{
       nq:d(avg(nqS)),ym:d(avg(ymS)),nk:d(avg(nkS)),
       staerke, stufe:1,
-      label:`${staerke} Signal â ${highEvs.length} High-Impact Event${highEvs.length>1?'s':''}`,
+      label:`${staerke} Signal — ${highEvs.length} High-Impact Event${highEvs.length>1?'s':''}`,
       events:highEvs
     };
   }
 
-  // Stufe 3: Nur Mid â Durchschnitt
+  // Stufe 3: Nur Mid → Durchschnitt
   if(midEvs.length>0){
     let nqS=0,ymS=0,nkS=0;
     midEvs.forEach(ev=>{const s=sig(ev);nqS+=sv[s.nq];ymS+=sv[s.ym];nkS+=sv[s.nk];});
     const n=midEvs.length;
     const d=v=>v/n>0.3?'buy':v/n<-0.3?'sell':'neut';
     const maxScore=Math.max(Math.abs(nqS/n),Math.abs(ymS/n));
-    const staerke=maxScore>0.7?'â¡ Starkes':maxScore>0.4?'Moderates':'Schwaches';
+    const staerke=maxScore>0.7?'! Starkes':maxScore>0.4?'Moderates':'Schwaches';
     return{
       nq:d(nqS),ym:d(ymS),nk:d(nkS),
       staerke, stufe:3,
-      label:`${staerke} Signal â ${midEvs.length} Mid-Impact Events (kein High heute)`,
+      label:`${staerke} Signal — ${midEvs.length} Mid-Impact Events (kein High heute)`,
       events:midEvs
     };
   }
 
-  if(lowEvs.length>0) return{nq:'neut',ym:'neut',nk:'neut',staerke:'',stufe:3,label:'Nur Low-Impact â kein klares Signal',events:lowEvs};
+  if(lowEvs.length>0) return{nq:'neut',ym:'neut',nk:'neut',staerke:'',stufe:3,label:'Nur Low-Impact — kein klares Signal',events:lowEvs};
   return null;
 }
 
@@ -1104,7 +1104,7 @@ function domSig(evs){
   if(evs.some(e=>e.impact==='claude')&&!evs.some(e=>e.impact==='high'||e.impact==='med'))return'claude';
   const h=hierarchieSignal(evs.filter(e=>e.impact!=='claude'));
   if(!h)return'neut';
-  // FÃ¼r Kalender: nehme NQ als Hauptsignal
+  // Für Kalender: nehme NQ als Hauptsignal
   const votes=[h.nq,h.ym].filter(v=>v!=='neut');
   if(votes.length===0)return'neut';
   const b=votes.filter(v=>v==='buy').length;
@@ -1112,10 +1112,10 @@ function domSig(evs){
   return b>s?'buy':s>b?'sell':'neut';
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 // STATE
-// ââââââââââââââââââââââââââââââââââââââââââââââ
-const MONATE=['Januar','Februar','MÃ¤rz','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+// ══════════════════════════════════════════════
+const MONATE=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
 const WOTAGE=['So','Mo','Di','Mi','Do','Fr','Sa'];
 const heute=new Date();
 let aktJ=heute.getFullYear(),aktM=heute.getMonth(),selT=null;
@@ -1136,9 +1136,9 @@ function vorabende(){
   return s;
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 // KALENDER
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 function renderKalender(){
   document.getElementById('navMonth').textContent=`${MONATE[aktM]} ${aktJ}`;
   const grid=document.getElementById('calGrid'),banner=document.getElementById('noDataBanner');
@@ -1172,23 +1172,23 @@ function renderKalender(){
         const d=document.createElement('div');d.className=`dot ${ev.impact}`;dr.appendChild(d);
       });
       z.appendChild(dr);
-      if(dom==='buy'||dom==='sell'){const ds=document.createElement('div');ds.className=`day-sig ${dom}`;ds.textContent=dom==='buy'?'â²':'â¼';z.appendChild(ds);}
-      else if(dom==='claude'){const ds=document.createElement('div');ds.className='day-sig';ds.style.color='#a78bfa';ds.textContent='ð£';z.appendChild(ds);}
-    }else if(istVb){const ds=document.createElement('div');ds.className='day-sig pre';ds.textContent='â ';z.appendChild(ds);}
+      if(dom==='buy'||dom==='sell'){const ds=document.createElement('div');ds.className=`day-sig ${dom}`;ds.textContent=dom==='buy'?'+':'-';z.appendChild(ds);}
+      else if(dom==='claude'){const ds=document.createElement('div');ds.className='day-sig';ds.style.color='#a78bfa';ds.textContent='●';z.appendChild(ds);}
+    }else if(istVb){const ds=document.createElement('div');ds.className='day-sig pre';ds.textContent='!';z.appendChild(ds);}
 
     z.onclick=()=>{if(evs.length||istVb)oeffneTag(k,t);};
     grid.appendChild(z);
   }
 
   // Status aktualisieren
-  const kontextIcon=KONTEXT.modus==='bull'?'ð¢':KONTEXT.modus==='bear'?'ð´':'âª';
-  const einpreisungText=KONTEXT.einpreisung==='stark'?'Â· â  Stark eingepreist':KONTEXT.einpreisung==='schwach'?'Â· ð¡ Wenig eingepreist':'';
+  const kontextIcon=KONTEXT.modus==='bull'?'[bull]':KONTEXT.modus==='bear'?'[H]':'o';
+  const einpreisungText=KONTEXT.einpreisung==='stark'?'· ! Stark eingepreist':KONTEXT.einpreisung==='schwach'?'· 💡 Wenig eingepreist':'';
   document.getElementById('statusText').textContent=`${kontextIcon} ${KONTEXT.description} ${einpreisungText}`;
 }
 
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 // TAG DETAIL
-// ââââââââââââââââââââââââââââââââââââââââââââââ
+// ══════════════════════════════════════════════
 function oeffneTag(k,tag){
   selT=k;renderKalender();
   const evs=amTag(k),wt=new Date(aktJ,aktM,tag);
@@ -1199,17 +1199,17 @@ function oeffneTag(k,tag){
   const nfpKombi=kombinierteNFPAnalyse(evs);
   if(nfpKombi){
     const sigColor=s=>s==='buy'?'#22c55e':s==='sell'?'#ef4444':'#f59e0b';
-    const sigText=s=>s==='buy'?'â² BUY':s==='sell'?'â¼ SELL':'â NEUT';
+    const sigText=s=>s==='buy'?'+ BUY':s==='sell'?'- SELL':'– NEUT';
     const nfpBanner=document.createElement('div');nfpBanner.className='kombi-banner';
     nfpBanner.style.borderColor='rgba(167,139,250,.3)';
     nfpBanner.innerHTML=`
-      <div class="kombi-title" style="color:#a78bfa;">ð¬ NFP Komplett-Analyse (alle 3 Komponenten)</div>
+      <div class="kombi-title" style="color:#a78bfa;">[NFP] NFP Komplett-Analyse (alle 3 Komponenten)</div>
       <div style="font-family:'DM Mono',monospace;font-size:9px;color:#5a5a5a;margin-bottom:6px;">${nfpKombi.label}</div>
-      ${nfpKombi.signale.map(s=>`<div style="font-family:'DM Mono',monospace;font-size:9px;color:#7c6adb;margin-bottom:2px;">â ${s}</div>`).join('')}
+      ${nfpKombi.signale.map(s=>`<div style="font-family:'DM Mono',monospace;font-size:9px;color:#7c6adb;margin-bottom:2px;">→ ${s}</div>`).join('')}
       <div class="kombi-signals" style="margin-top:8px;">
         <div class="kombi-box"><div class="kombi-lbl">NQ1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor(nfpKombi.richtung)}">${sigText(nfpKombi.richtung)}</div></div>
         <div class="kombi-box"><div class="kombi-lbl">YM1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor(nfpKombi.richtung)}">${sigText(nfpKombi.richtung)}</div></div>
-        <div class="kombi-box"><div class="kombi-lbl">NK1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor('neut')}">â NEUT</div></div>
+        <div class="kombi-box"><div class="kombi-lbl">NK1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor('neut')}">– NEUT</div></div>
       </div>
     `;
     con.appendChild(nfpBanner);
@@ -1219,22 +1219,22 @@ function oeffneTag(k,tag){
   const hSig=hierarchieSignal(evs.filter(e=>e.impact!=='claude'));
   if(hSig){
     const sigColor=s=>s==='buy'?'#22c55e':s==='sell'?'#ef4444':'#f59e0b';
-    const sigText=s=>s==='buy'?'â² BUY':s==='sell'?'â¼ SELL':'â NEUT';
-    const stufenLabel=hSig.stufe===1?'ð´ High-Impact dominiert':'ð¡ Mid-Impact (kein High heute)';
+    const sigText=s=>s==='buy'?'+ BUY':s==='sell'?'- SELL':'– NEUT';
+    const stufenLabel=hSig.stufe===1?'[H] High-Impact dominiert':'[M] Mid-Impact (kein High heute)';
     const kb=document.createElement('div');kb.className='kombi-banner';
     kb.innerHTML=`
-      <div class="kombi-title">${stufenLabel} â ${hSig.label}</div>
+      <div class="kombi-title">${stufenLabel} — ${hSig.label}</div>
       <div class="kombi-signals">
         <div class="kombi-box"><div class="kombi-lbl">NQ1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor(hSig.nq)}">${sigText(hSig.nq)}</div></div>
         <div class="kombi-box"><div class="kombi-lbl">YM1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor(hSig.ym)}">${sigText(hSig.ym)}</div></div>
         <div class="kombi-box"><div class="kombi-lbl">NK1!</div><div style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:${sigColor(hSig.nk)}">${sigText(hSig.nk)}</div></div>
       </div>
-      <div style="font-family:'DM Mono',monospace;font-size:8px;color:#5a5a5a;margin-top:5px;">${KONTEXT.description}${KONTEXT.einpreisung==='stark'?' Â· â  Stark eingepreist â sell the news Risiko':KONTEXT.einpreisung==='schwach'?' Â· ð¡ Wenig eingepreist â mehr Upside':''}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:8px;color:#5a5a5a;margin-top:5px;">${KONTEXT.description}${KONTEXT.einpreisung==='stark'?' · ! Stark eingepreist — sell the news Risiko':KONTEXT.einpreisung==='schwach'?' · 💡 Wenig eingepreist — mehr Upside':''}</div>
     `;
     con.appendChild(kb);
   } else {
     const bn=document.createElement('div');bn.className='info-banner';
-    bn.innerHTML=`â¡ Signal: Prognose vs. Vorwert Â· ${KONTEXT.description}`;
+    bn.innerHTML=`! Signal: Prognose vs. Vorwert · ${KONTEXT.description}`;
     con.appendChild(bn);
   }
 
@@ -1244,7 +1244,7 @@ function oeffneTag(k,tag){
   const mH=EVENTS.filter(e=>e.date===mk&&e.impact==='high');
   if(mH.length&&!evs.some(e=>e.impact==='high')){
     const vb=document.createElement('div');vb.className='vorabend';
-    vb.innerHTML=`â  Vorabend â Morgen ${mH.length} High-Impact Event(s):<br>${mH.map(e=>`<b>${e.name}</b> ${e.time} Uhr`).join(' Â· ')}`;
+    vb.innerHTML=`! Vorabend — Morgen ${mH.length} High-Impact Event(s):<br>${mH.map(e=>`<b>${e.name}</b> ${e.time} Uhr`).join(' · ')}`;
     con.appendChild(vb);
   }
 
@@ -1256,26 +1256,26 @@ function oeffneTag(k,tag){
     // Claude Update Event
     if(ev.impact==='claude'){
       const karte=document.createElement('div');karte.className='ev-card claude';
-      karte.innerHTML=`<div class="ev-top"><div class="ev-flag">ð£</div><div class="ev-name" style="color:#a78bfa;font-weight:600;">${ev.name}</div><div class="imp claude">Update</div></div><div style="padding:0 11px 12px;"><div style="background:rgba(167,139,250,.08);border-radius:6px;padding:10px 12px;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:#a78bfa;font-weight:500;margin-bottom:5px;">â¡ Daten-Update fÃ¤llig</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#9d8fd4;line-height:1.7;">Die Daten sind 3 Monate alt.<br>Schreib Claude: <span style="color:#a78bfa;font-weight:600;">"Update Futures Kalender"</span></div></div></div>`;
+      karte.innerHTML=`<div class="ev-top"><div class="ev-flag">●</div><div class="ev-name" style="color:#a78bfa;font-weight:600;">${ev.name}</div><div class="imp claude">Update</div></div><div style="padding:0 11px 12px;"><div style="background:rgba(167,139,250,.08);border-radius:6px;padding:10px 12px;"><div style="font-family:'DM Mono',monospace;font-size:9px;color:#a78bfa;font-weight:500;margin-bottom:5px;">! Daten-Update fällig</div><div style="font-family:'DM Mono',monospace;font-size:10px;color:#9d8fd4;line-height:1.7;">Die Daten sind 3 Monate alt.<br>Schreib Claude: <span style="color:#a78bfa;font-weight:600;">"Update Futures Kalender"</span></div></div></div>`;
       con.appendChild(karte);return;
     }
 
     const s=sig(ev);
-    const fcW=ev.forecast&&ev.forecast!=='â'?ev.forecast:'â';
-    const pvW=ev.prev&&ev.prev!=='â'?ev.prev:'â';
-    const acW=ev.actual&&ev.actual!=='â'?ev.actual:'â';
+    const fcW=ev.forecast&&ev.forecast!=='—'?ev.forecast:'—';
+    const pvW=ev.prev&&ev.prev!=='—'?ev.prev:'—';
+    const acW=ev.actual&&ev.actual!=='—'?ev.actual:'—';
     let acKls='';
-    if(ev.actual&&ev.actual!=='â'){const a=pZ(ev.actual),f=pZ(ev.forecast);if(a!==null&&f!==null)acKls=a>f?'beat':'miss';}
-    const sb=(sg,lbl)=>{const k2=sg==='buy'?'buy':sg==='sell'?'sell':'neut';return`<div class="sbox"><div class="sfut">${lbl}</div><div class="sbadge ${k2}">${sg==='buy'?'â² BUY':sg==='sell'?'â¼ SELL':'â NEUT'}</div></div>`;};
-    // Momentum-Trend hinzufÃ¼gen
+    if(ev.actual&&ev.actual!=='—'){const a=pZ(ev.actual),f=pZ(ev.forecast);if(a!==null&&f!==null)acKls=a>f?'beat':'miss';}
+    const sb=(sg,lbl)=>{const k2=sg==='buy'?'buy':sg==='sell'?'sell':'neut';return`<div class="sbox"><div class="sfut">${lbl}</div><div class="sbadge ${k2}">${sg==='buy'?'+ BUY':sg==='sell'?'- SELL':'– NEUT'}</div></div>`;};
+    // Momentum-Trend hinzufügen
     const momentum=trendMomentum(ev.name);
     const momentumText=Math.abs(momentum)>=2
-      ?`Trend: ${momentum>0?'â':'â'} ${Math.abs(momentum)}x in Folge ${momentum>0?'(verstÃ¤rkt BUY)':'(verstÃ¤rkt SELL)'}`
+      ?`Trend: ${momentum>0?'v':'^'} ${Math.abs(momentum)}x in Folge ${momentum>0?'(verstärkt BUY)':'(verstärkt SELL)'}`
       :'';
     if(momentumText) s.gr.push(momentumText);
 
-    const az=s.gr.filter(Boolean).map(g=>`<div class="aline"><span class="ai">â</span><span>${g}</span></div>`).join('');
-    const hz=s.hi.filter(Boolean).map(h=>`<div class="aline warn"><span class="ai">â </span><span>${h}</span></div>`).join('');
+    const az=s.gr.filter(Boolean).map(g=>`<div class="aline"><span class="ai">→</span><span>${g}</span></div>`).join('');
+    const hz=s.hi.filter(Boolean).map(h=>`<div class="aline warn"><span class="ai">!</span><span>${h}</span></div>`).join('');
     const impLabel=ev.impact==='high'?'High':ev.impact==='med'?'Mid':'Low';
 
     const karte=document.createElement('div');karte.className=`ev-card ${ev.impact}`;
